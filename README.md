@@ -1,0 +1,1 @@
+# artist_management_system
