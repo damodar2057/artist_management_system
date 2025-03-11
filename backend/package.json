@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx nodemon --ext ts --watch src --exec ts-node src/app.ts",
+    "db:init": "psql -U postgres -f ./server/db/init.sql",
+    "db:migrate": "node ./server/db/migrations.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.10",
+    "@types/pg": "^8.11.11",
+    "chalk": "4.1.2",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "nodemon": "^3.1.9",
+    "pg": "^8.13.3",
+    "pino": "^9.6.0"
+  }
+}

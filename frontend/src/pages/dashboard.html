@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, <span id="userWelcome"></span>!</h2>
+        <button onclick="logout()">Logout</button>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        window.onload = function() {
+            let user = localStorage.getItem("loggedInUser");
+            if (!user) {
+                window.location.href = "index.html"; // Redirect to login if not logged in
+            } else {
+                document.getElementById("userWelcome").innerText = user;
+            }
+        };
+    </script>
+</body>
+</html>

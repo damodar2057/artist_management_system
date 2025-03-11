@@ -1,0 +1,1 @@
+// this middleware is responsible for validating auth related activity
