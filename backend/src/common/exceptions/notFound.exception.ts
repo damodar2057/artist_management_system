@@ -1,10 +1,11 @@
 //
 
+import { ErrorCodes } from "../constants/error-codes.enum";
 import { BaseException } from "./base.exception";
 
 
 export class NotFoundException extends BaseException {
-    constructor(message: string = "Not Found Exception", code: string, statusCode: number = 404, details: string){
-        super(message, code, statusCode, details)
+    constructor(message: string, details?: string){
+        super(message, ErrorCodes.NOT_FOUND, 404, details)
     }
 }

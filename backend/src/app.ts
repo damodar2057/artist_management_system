@@ -2,54 +2,72 @@
 
 
 import * as express from 'express';
-import userRoutes from './routes/userRoutes'
 import * as dotenv from 'dotenv';
-import * as cors from 'cors'
-import helmet from 'helmet'
+import * as cors from 'cors';
+import  helmet from 'helmet';
+import { rateLimit } from 'express-rate-limit';
+import db from 'src/db/index'
+
+// Routes
+import userRoutes from './routes/userRoutes';
 import artistRoutes from './routes/artistRoutes';
 import musicRoutes from './routes/musicRoutes';
 import authRoutes from './routes/authRoutes';
+
+// Middlewares
 import errorHandler from './middlewares/errorHandler';
 import loggerMiddleware from './middlewares/loggerMiddleware';
 import responseMiddleware from './middlewares/responseMiddleware';
-import { rateLimit } from 'express-rate-limit'
-import appConfig from './config/app.config';
 
-const app = express()
-app.use(express.json())
+// Config
+import appConfig from './config/app.config';
+import logger from './common/logger/logger';
 
 // Initialize environment variables
 dotenv.config();
 
-app.use(express.urlencoded({ extended: true })); 
+async function startServer() {
+  try {
+    
+    const app = express();
+    
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+    app.use(helmet());
+    app.use(cors({ origin: appConfig.client_origin }));
+    
+    // Rate limiting
+    const limiter = rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes window
+      max: 100, // 100 requests per windowMs per IP
+      message: 'Too many requests, please try again later.',
+    });
+    app.use(limiter);
+    app.use(responseMiddleware);
+    app.use(loggerMiddleware);
+    
+    // Application routes
+    app.use('/api/v1/auth', authRoutes);
+    app.use('/api/v1/user', userRoutes);
+    app.use('/api/v1/artist', artistRoutes);
+    app.use('/api/v1/music', musicRoutes);
+    
+    app.use(errorHandler);
+  
+    try {
+      await db.initialize()
+      app.listen(appConfig.port, () => {
+        logger.info(`Server started at port ${appConfig.port}`);
+      });
+    } catch (error) {
+      logger.error(`Database initialization failed: ${error}`);
 
-app.use(helmet()); 
+    }
+    
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
 
-app.use(cors({ origin: appConfig.client_origin }));
-
-
-const limiter = rateLimit({  // in 15 mins window, it will accept 100 request from each IP
-   windowMs: 15 * 60 * 1000,
-   max: 100,
-   message: 'Too many requests, please try again later.',
- });
-
-
- app.use(limiter);
-
-// Routes
-app.use('/api/v1/auth', authRoutes)
-app.use('/api/v1/user', userRoutes)
-app.use('/api/v1/artist', artistRoutes)
-app.use('/api/v1/music', musicRoutes)
-app.use('/api/v1/auth', authRoutes)
-
-
-// Middlewares
-app.use(responseMiddleware)
-app.use(loggerMiddleware)
-app.use(errorHandler)
-
-app.listen(appConfig.port, ()=> {
-   console.log(`Server started at ${process.env.PORT}`);
-})
+startServer();

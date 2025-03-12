@@ -1,7 +1,7 @@
 //
 
 import { NextFunction, Request, Response } from "express";
-import chalk from 'chalk';
+import * as chalk from 'chalk';
 
 
 

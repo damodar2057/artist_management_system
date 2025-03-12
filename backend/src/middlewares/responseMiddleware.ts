@@ -9,10 +9,9 @@ import { IBaseResponse } from "../common/interfaces/base-response.interface";
 
 function responseMiddleware(req: Request, res: Response, next: NextFunction) {
     const originalJson = res.json.bind(res); // Preserve original res.json
-
     res.json = (data: any) => {
         const baseResponse: IBaseResponse = {
-            message: (data && data.message) || "Success",
+            message: (data && data.message) || "success",
             path: req.originalUrl,
             statusCode: res.statusCode || 200,
             timestamp: format(new Date(), "yyyy-MM-dd HH:mm:ss"),

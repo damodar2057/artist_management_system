@@ -17,5 +17,8 @@
     "noImplicitThis": false,
     "noFallthroughCasesInSwitch": false
   },
+  "paths": {
+    "@/*": ["./*"]
+  },
 
 }

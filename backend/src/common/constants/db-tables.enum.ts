@@ -1,7 +1,9 @@
 //
 
-export enum DbTables {
+export enum DBTables {
     MUSIC='music',
     USER='user',
-    ARTIST='artist'
+    ARTIST='artist',
+    MIGRATIONS='migrations'
 }
+

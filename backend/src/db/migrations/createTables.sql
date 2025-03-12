@@ -11,7 +11,7 @@ CREATE TABLE users (
     role VARCHAR(20) CHECK (role IN ('super_admin', 'artist_manager', 'artist')),
     address VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NULL
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 -- Artist table creation
@@ -21,7 +21,7 @@ CREATE TABLE artists (
     dob TIMESTAMP NOT NULL,
     gender CHAR(1) CHECK (gender IN ('m','f','o')),
     address VARCHAR(255) NOT NULL,
-    first_release_year YEAR,
+    first_release_year INT NOT NULL,
     no_of_albums_released INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
