@@ -1,0 +1,113 @@
+[
+    {
+      "id": 101,
+      "name": "The Weeknd",
+      "dob": "1990-02-16",
+      "gender": "m",
+      "address": "Toronto, Canada",
+      "first_release_year": 2012,
+      "no_of_albums_released": 5,
+      "created_at": "2020-01-01",
+      "updated_at": "2024-03-01"
+    },
+    {
+      "id": 102,
+      "name": "Ed Sheeran",
+      "dob": "1991-02-17",
+      "gender": "m",
+      "address": "Halifax, United Kingdom",
+      "first_release_year": 2011,
+      "no_of_albums_released": 6,
+      "created_at": "2020-02-15",
+      "updated_at": "2024-03-02"
+    },
+    {
+      "id": 103,
+      "name": "Freddie Mercury",
+      "dob": "1946-09-05",
+      "gender": "m",
+      "address": "Zanzibar, Tanzania",
+      "first_release_year": 1973,
+      "no_of_albums_released": 15,
+      "created_at": "2020-03-10",
+      "updated_at": "2024-01-20"
+    },
+    {
+      "id": 104,
+      "name": "Kendrick Lamar",
+      "dob": "1987-06-17",
+      "gender": "m",
+      "address": "Compton, California, USA",
+      "first_release_year": 2011,
+      "no_of_albums_released": 4,
+      "created_at": "2020-05-01",
+      "updated_at": "2024-02-28"
+    },
+    {
+      "id": 105,
+      "name": "Adele",
+      "dob": "1988-05-05",
+      "gender": "f",
+      "address": "Tottenham, London, UK",
+      "first_release_year": 2008,
+      "no_of_albums_released": 3,
+      "created_at": "2020-03-15",
+      "updated_at": "2024-03-10"
+    },
+    {
+      "id": 106,
+      "name": "Mark Ronson",
+      "dob": "1975-09-04",
+      "gender": "m",
+      "address": "London, United Kingdom",
+      "first_release_year": 2003,
+      "no_of_albums_released": 6,
+      "created_at": "2020-06-20",
+      "updated_at": null
+    },
+    {
+      "id": 107,
+      "name": "Billie Eilish",
+      "dob": "2001-12-18",
+      "gender": "f",
+      "address": "Los Angeles, California, USA",
+      "first_release_year": 2017,
+      "no_of_albums_released": 2,
+      "created_at": "2020-07-15",
+      "updated_at": "2024-02-15"
+    },
+    {
+      "id": 108,
+      "name": "Eagles",
+      "dob": "1971-01-01",
+      "gender": "m",
+      "address": "Los Angeles, California, USA",
+      "first_release_year": 1971,
+      "no_of_albums_released": 7,
+      "created_at": "2020-08-08",
+      "updated_at": null
+    },
+    {
+      "id": 109,
+      "name": "Drake",
+      "dob": "1986-10-24",
+      "gender": "m",
+      "address": "Toronto, Canada",
+      "first_release_year": 2009,
+      "no_of_albums_released": 6,
+      "created_at": "2020-09-10",
+      "updated_at": "2024-03-12"
+    },
+    {
+      "id": 110,
+      "name": "Taylor Swift",
+      "dob": "1989-12-13",
+      "gender": "f",
+      "address": "Reading, Pennsylvania, USA",
+      "first_release_year": 2006,
+      "no_of_albums_released": 9,
+      "created_at": "2020-10-01",
+      "updated_at": "2024-02-18"
+    }
+  ]
+  

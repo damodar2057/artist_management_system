@@ -2,25 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/icons8-favicon-16.png" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>AMS Dashboard</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/create-user-form.css">
+    <link rel="stylesheet" href="../css/create-music-form.css">
+    <link rel="stylesheet" href="../css/create-artist-form.css">
+
 </head>
 <body>
     <div class="container">
-        <h2>Welcome, <span id="userWelcome"></span>!</h2>
-        <button onclick="logout()">Logout</button>
+        <!-- Sidebar Section -->
+        <div class="left-container">
+            <div class="title-section">AMS Dashboard</div>
+            <div class="sidebar">
+                <ul class="menu">
+                    <li><a href="#" id="users-link">Users</a></li>
+                    <li><a href="#" id="artists-link">Artists</a></li>
+                    <li><a href="#" id="musics-link">Musics</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Container -->
+        <div class="right-container">
+            <!-- Navbar -->
+            <div class="navbar">
+                <h2>Welcome, <span id="userWelcome">Admin</span></h2>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Breadcrumb -->
+                <div class="breadcrumb">
+                    <span>Dashboard > <span id="breadcrumbText"></span></span>
+                </div>
+                <div class="createRecordBtnContainer">
+                    <button type="button" id="createRecButton">Create</button>
+                </div>
+
+                <!-- Hero Section with Centered Table -->
+                <div id="content" class="hero-section">
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="script.js"></script>
-    <script>
-        window.onload = function() {
-            let user = localStorage.getItem("loggedInUser");
-            if (!user) {
-                window.location.href = "index.html"; // Redirect to login if not logged in
-            } else {
-                document.getElementById("userWelcome").innerText = user;
-            }
-        };
-    </script>
+
+    <script type="module" src="../js/dashboard.ts"></script>
+    <script type="module" src="../js/create-user.ts"></script>
 </body>
 </html>

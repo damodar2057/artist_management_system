@@ -1,13 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="/src/css/styles.css">
-</head>
-<body>
-    <h1>Login Page</h1>
-   <p> Heelo from login page</p>
-</body>
-</html>
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="icon" href="/icons8-favicon-16.png" type="image/x-icon">
+      <title>Login Form</title>
+      <link rel="stylesheet" href="../css/login.css" />
+    </head>
+    <body>
+      <div class="loginForm">
+        <form id="login">
+          <h1 class="loginTitle">Login</h1>
+          <div class="usernameSection">
+            <label class="usernameLabel" for="username">Username:</label>
+            <input class="usernameInput" type="text" id="username" name="username" required />
+          </div>
+          <div class="passwordSection">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+          <div class="loginButton">
+            <button type="submit" id="submitButton">Login</button>
+          </div>
+          <div class="textSection">
+            <span>Don't have an account? <a href="register.html">Create an account</a></span>
+          </div>
+        </form>
+      </div>
+      <script type="module" src="../js/auth.ts"></script>
+    </body>
+  </html>
+dddd

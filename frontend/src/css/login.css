@@ -1,0 +1,87 @@
+/* Global Styles */
+body {
+    background-color: #f1f0ec;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Centering the Login Form */
+.loginForm {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Login Box */
+#login {
+    background-color: #f5f3ff;
+    box-shadow: 6px 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 4rem 2.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    border-radius: 0.5rem;
+    max-width: 400px;
+    width: 90%;
+}
+
+/* Title */
+.loginTitle {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* Input Sections */
+.usernameSection,
+.passwordSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Input Fields */
+input {
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    border-color: #7f5af0;
+}
+
+/* Button */
+.loginButton {
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    padding: 0.6rem;
+    border-radius: 0.4rem;
+    background-color: #7f5af0;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #6241c7;
+}
+
+/* Additional Text Section */
+.textSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+}

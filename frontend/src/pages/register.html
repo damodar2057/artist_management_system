@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/icons8-favicon-16.png" type="image/x-icon">
+    <title>Register Form</title>
+    <link rel="stylesheet" href="../css/register.css" />
+  </head>
+  <body>
+    <div class="registerForm">
+      <form id="register">
+        <h1 class="registerTitle">Register</h1>
+        <div class="usernameSection">
+          <label class="usernameLabel" for="username">Username:</label>
+          <input class="usernameInput" type="text" id="username" name="username" required />
+        </div>
+        <div class="passwordSection">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <div class="registerButton">
+          <button type="submit">Register</button>
+        </div>
+        <div class="textSection">
+          <span>Already have an account? <a href="login.html">Login</a></span>
+        </div>
+      </form>
+    </div>
+    <script type="module" src="../js/auth.ts"></script>
+  </body>
+</html>

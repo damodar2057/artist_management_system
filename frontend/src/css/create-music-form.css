@@ -1,0 +1,61 @@
+.create-music-container {
+    background-color: #ffffff;
+    max-width: 1200px; /* Increased from 800px to 1200px */
+    width: 90%; /* Added to ensure it scales well on different screens */
+    margin: 2rem auto;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.create-music-container .text {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: #333;
+    position: relative;
+}
+
+.create-music-container .text:after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #007bff, #00c6ff);
+    margin: 0.8rem auto 0;
+    border-radius: 2px;
+}
+
+/* Form Grid Layout */
+.create-music-container form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  
+    gap: 1rem;  
+    grid-template-rows: auto; 
+}
+
+/* For wider layouts, let's make sure we use the space well */
+@media (min-width: 992px) {
+    .create-music-container form {
+        grid-template-columns: repeat(4, 1fr); /* Force 4 columns on wider screens */
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .create-music-container {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+        width: calc(100% - 2rem); /* Full width minus margins on mobile */
+    }
+    
+    .create-music-container .text {
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+    }
+    
+    .create-music-container form {
+        gap: 1.5rem;
+    }
+}
