@@ -9,8 +9,6 @@ export async function signJwtToken(payload: IJwtPayload){
         expiresIn: +appConfig.jwtExpiryInterval
     })
 }
-
-
 export async function verifyJwtToken(token: string): Promise<IJwtPayload> {
     return  jwt.verify(token, appConfig.jwtSecretKey) as IJwtPayload
 }

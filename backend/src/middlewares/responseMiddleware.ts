@@ -5,9 +5,12 @@ import { Request, Response, NextFunction } from "express";
 import { format } from "date-fns";
 import { IBaseResponse } from "../common/interfaces/base-response.interface";
 
-function responseMiddleware(err: any,req: Request, res: Response, next: NextFunction) {
+function responseMiddleware(req: Request, res: Response, next: NextFunction) {
     const originalJson = res.json.bind(res); // Preserve original res.json
     res.json = (data: any) => {
+        if(data && data.success === 'false'){  // skip formatting if res is an error
+            return originalJson(data)
+        }
         if (res.headersSent) return;  // Prevent sending response if headers are already sent
 
         const baseResponse: IBaseResponse = {
@@ -30,6 +33,7 @@ function responseMiddleware(err: any,req: Request, res: Response, next: NextFunc
             });
         }
     };
+    next()
 
 }
 
