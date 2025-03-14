@@ -6,6 +6,9 @@ import db from 'src/db'
 import { usersQueries } from "src/db/queries/user.query";
 import { CreateUserDto } from "src/dtos/user.dto";
 
+interface FindOptionsWhere<T> {
+    
+}
 
 export class UserModel {
     private dbConnection: Pool;
@@ -33,6 +36,14 @@ export class UserModel {
     async findOne(id: string): Promise<IUserEntity> {
         try {
             return (await this.dbConnection.query(usersQueries.findOne,[id])).rows[0]
+        } catch (error) {
+            throw error
+        }
+    }
+    
+    async findByEmail(email: string): Promise<IUserEntity> {
+        try {
+            return (await this.dbConnection.query(usersQueries.findByEmail,[email])).rows[0]
         } catch (error) {
             throw error
         }

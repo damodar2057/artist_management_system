@@ -1,32 +1,28 @@
 //  backend/src/middlewares/errorHandler.ts
 
-import { format } from 'date-fns';
+
 import { Request, Response, NextFunction } from 'express';
-import { BaseException } from '../common/exceptions/base.exception';
-import { ErrorCodes } from '../common/constants/error-codes.enum';
+import { ErrorCodes } from 'src/common/constants/error-codes.enum';
+import appConfig from 'src/config/app.config';
 
-export const errorHandler = (err: Error, req: Request, res: any, next: NextFunction) => {
-  const baseErrorRes = {
-    success: false,
-    path: req.path, 
-    timestamp: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-    stack: process.env.NODE_ENV === 'development' ? err.stack : null,
-  };
-
-  if (err instanceof BaseException) {
-    return res.status(err.statusCode).json({
-      ...baseErrorRes, 
-      message: err.message,
-      code: err.code,
-      details: process.env.NODE_ENV === 'development' ? err.details : null,
-    });
+function errorHandler(error: any, req: Request, res: Response, next: NextFunction) {
+  if (res.headersSent) {
+    return next(error); // If headers are already sent, pass to the default error handler
   }
 
-  return res.status(500).json({
-    ...baseErrorRes,
-    message: "Internal Server Error",
-    code: ErrorCodes.INTERNAL_ERROR,
+  const statusCode = error.statusCode || 500;
+  const message = error.message || 'Internal Server Error';
+
+  // Send a structured error response
+  res.status(statusCode).json({
+    success: 'false',
+    code: error.code || ErrorCodes.INTERNAL_ERROR,
+    statusCode,
+    message,
+    path: req.originalUrl,
+    timestamp: new Date().toISOString(),
+    details: appConfig.node_env === 'development' ? error.stack.split('\n').slice(0,2).join(' ') : null
   });
-};
+}
 
 export default errorHandler;

@@ -1,8 +1,18 @@
 // backend/src/services/auth.service.ts
 
 
+import { ErrorCodes } from "src/common/constants/error-codes.enum";
+import { BadRequestException } from "src/common/exceptions/badRequest.exception";
+import { BaseException } from "src/common/exceptions/base.exception";
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
+import { ConflictException } from "src/common/exceptions/resource-conflict.exception";
+import { UnauthorizedException } from "src/common/exceptions/unauthorized.exception";
+import appConfig from "src/config/app.config";
+import { LoginDto } from "src/dtos/login.dto";
+import { RegisterDto } from "src/dtos/register.dto";
 import { UserModel } from "src/models/userModels";
+import { hashPassword, verifyHash } from "src/utils/hash-password.util";
+import { signJwtToken } from "src/utils/jwt.util";
 
 export class AuthService {
     private static instance: AuthService;
@@ -19,18 +29,41 @@ export class AuthService {
         return AuthService.instance;
     }
 
-    public async login(dto: any): Promise<{ message: string }> {
+    public async login(dto: LoginDto): Promise<{ accessToken: string, expiresIn: number }> {
         try {
-            // TODO :: Implement login logic (authentication, token generation, etc.)
-            return { message: "Login successful" };
+            // first check if user with this email already exist
+            const existingUser = await this.repository.findByEmail(dto.username)
+            if (!existingUser) {
+                throw new NotFoundException(`User not found!`)
+            }
+
+            if (!verifyHash(dto.password, existingUser.password)) {
+                throw new UnauthorizedException('Invalid credentials')
+            }
+
+            return {
+                accessToken: await signJwtToken({
+                    ...existingUser,
+                }),
+                expiresIn: +(appConfig.jwtExpiryInterval) * 60 * 60
+
+            };
         } catch (error) {
             throw error;
         }
     }
 
-    public async register(dto: any): Promise<{ message: string }> {
+    public async register(dto: RegisterDto): Promise<{ message: string }> {
         try {
-            // TODO :: Implement registration logic (creating new user, etc.)
+            // first check if user with this email already exist
+            const existingUser = await this.repository.findByEmail(dto.email)
+            if (existingUser) {
+                throw new ConflictException(`User with ${dto.email} already exists`)
+            }
+            await this.repository.create({
+                ...dto,
+                password: await hashPassword(dto.password)
+            })
             return { message: "Registration successful" };
         } catch (error) {
             throw error;

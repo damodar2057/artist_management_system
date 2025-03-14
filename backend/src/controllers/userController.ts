@@ -1,6 +1,8 @@
 //
 
 import { Request } from "express";
+import { Permissions } from "src/common/constants/permissions.enum";
+import { PermissionGuard } from "src/common/decorators/permission-guard.decorator";
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
 import { IUserEntity } from "src/common/interfaces/user.interface"
 import { UserService } from "src/services/userService"
@@ -20,6 +22,7 @@ export class UserController {
     }
 
 
+    // @PermissionGuard(Permissions.READ_USER)
     async getAllUsers(req: Request): Promise<IUserEntity[]> {
         try {
             return await this.userService.fetchAllUsers();

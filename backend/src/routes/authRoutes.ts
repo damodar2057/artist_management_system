@@ -6,17 +6,19 @@ import { AuthController } from 'src/controllers/authController';
 const router: express.Router = express.Router();
 const authController = AuthController.getInstance()
 
-router.get('/login', async (req, res, next) => {
+router.post('/login', async (req, res, next) => {
     try {
-        await authController.login(req);
+        const loginRes = await authController.login(req);
+        res.json(loginRes)
     } catch (error) {
         next(error);
     }
 });
 
-router.get('/register', async (req, res, next) => {
+router.post('/register', async (req, res, next) => {
     try {
-        await authController.register(req);
+        const newUser = await authController.register(req);
+        res.json(newUser)
     } catch (error) {
         next(error);
     }

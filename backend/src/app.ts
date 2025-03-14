@@ -22,6 +22,7 @@ import responseMiddleware from './middlewares/responseMiddleware';
 // Config
 import appConfig from './config/app.config';
 import logger from './common/logger/logger';
+import { authMiddleware } from './middlewares/authMiddleware';
 
 // Initialize environment variables
 dotenv.config();
@@ -34,7 +35,7 @@ async function startServer() {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(helmet());
-    app.use(cors({ origin: appConfig.client_origin }));
+    app.use(cors({ origin: '*' }));
     
     // Rate limiting
     const limiter = rateLimit({
@@ -43,14 +44,14 @@ async function startServer() {
       message: 'Too many requests, please try again later.',
     });
     app.use(limiter);
-    app.use(responseMiddleware);
     app.use(loggerMiddleware);
+    app.use(responseMiddleware);
     
     // Application routes
     app.use('/api/v1/auth', authRoutes);
-    app.use('/api/v1/user', userRoutes);
-    app.use('/api/v1/artist', artistRoutes);
-    app.use('/api/v1/music', musicRoutes);
+    app.use('/api/v1/user', authMiddleware,userRoutes);
+    app.use('/api/v1/artist',authMiddleware, artistRoutes);
+    app.use('/api/v1/music',authMiddleware, musicRoutes);
     
     app.use(errorHandler);
   

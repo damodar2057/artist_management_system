@@ -25,7 +25,7 @@ class Database {
     } catch (error) {
       
       logger.error(`Error connection to database ${error}`)
-      process.exit(-1)
+      process.exit(1)
     }
   }
 

@@ -15,6 +15,7 @@ export const ErrorCodes = {
     
     // Resource Errors (404)
     NOT_FOUND: 'NOT_FOUND',
+    BAD_REQUEST:'bad_request',
     RESOURCE_NOT_FOUND: 'RESOURCE_NOT_FOUND',
     
     // Conflict Errors (409)
