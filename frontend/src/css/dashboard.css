@@ -141,6 +141,11 @@ th, td {
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
+table tbody tr td a {
+    /* background-color: red; */
+    text-decoration: none;
+    color: blue;
+}
 
 tbody tr:hover {
     background-color: #f5f5f5;
@@ -312,4 +317,34 @@ input[type="date"] {
     0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); }
     70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
     100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+}
+
+.goBackButton {
+    margin-top: 1rem;
+    text-align: center;
+    display: none;
+}
+
+.goBackButton button {
+    padding: 10px 20px;
+    background-color: #6536f4;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.goBackButton button:hover {
+    background-color:  #007bff;
+}
+
+.goBackButton button:focus {
+    outline: none;
+}
+
+.goBackButton button:active {
+    background-color:  #007bff;
 }

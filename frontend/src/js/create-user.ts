@@ -1,14 +1,10 @@
 //
 
-import { postUser } from "../utils/api";
 
 
 function attachUserFormListener() {
     // Select the dynamically added form
     const userCreateForm = document.querySelector(".create-user-container form") as HTMLFormElement;
-
-    console.log(`User create form element: ${userCreateForm}  `)
-    console.log(`User create form element: ${userCreateForm}  `)
 
     if (userCreateForm) {
         userCreateForm.addEventListener("click", async (event) => {

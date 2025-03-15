@@ -4,7 +4,7 @@ import { tableConstants } from '../../common/constants/table.constants'
 
 export function getArtistsTable(content: IArtist[]) {
     return `
-           <table border="1">
+           <table border="1" id="artist-table">
                    <thead>
                        <tr>
                            ${Object.values(tableConstants.artistTableHeaders)
@@ -16,7 +16,7 @@ export function getArtistsTable(content: IArtist[]) {
             <tbody>
                 ${content.map(artist => `
                     <tr>
-                        <td>${artist.id}</td>
+                        <td><a href="#">${artist.id || ""}</a></td>
                         <td>${artist.name}</td>
                         <td>${artist.dob}</td>
                         <td>${artist.gender}</td>
@@ -25,6 +25,8 @@ export function getArtistsTable(content: IArtist[]) {
                         <td>${artist.no_of_albums_released}</td>
                         <td>${artist.created_at}</td>
                         <td>${artist.updated_at || "N/A"}</td>
+                                         <td><button type="button" data-id="${artist.id || ""}" class="update-btn">Update</button></td>
+                    <td><button type="button" data-id="${artist.id || ""}" class="delete-btn">Delete</button></td>
                     </tr>
                 `).join('')}
             </tbody>

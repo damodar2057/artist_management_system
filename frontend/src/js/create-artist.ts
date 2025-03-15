@@ -1,6 +1,7 @@
 //
 
-import { postArtist } from "../utils/api";
+import artistApiManager from "../apis/artist.api";
+
 
 
 function attachArtistFormListener() {
@@ -26,7 +27,7 @@ function attachArtistFormListener() {
 
 
             try {
-                await postArtist(payload);
+                await artistApiManager.createArtist(payload);
                 artistCreateForm.reset()
             } catch (error) {
                 console.error(`Failed to create music:: ${error} `)

@@ -1,0 +1,171 @@
+/* Common Styles for User, Artist, and Music Update Forms */
+.update-user-details-card, .update-artist-details-card, .update-music-details-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 30px auto;
+    font-family: Arial, sans-serif;
+}
+
+.update-user-details-card h2, .update-artist-details-card h2, .update-music-details-card h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.update-user-details-card .field-container,
+.update-artist-details-card .field-container,
+.update-music-details-card .field-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;  /* Two columns for fields */
+    gap: 1rem;
+    grid-template-rows: auto;
+}
+
+.update-user-details-card .form-group,
+.update-artist-details-card .form-group,
+.update-music-details-card .form-group {
+    margin-bottom: 15px;
+}
+
+.update-user-details-card label,
+.update-artist-details-card label,
+.update-music-details-card label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.update-user-details-card input, 
+.update-user-details-card select, 
+.update-user-details-card textarea,
+.update-artist-details-card input, 
+.update-artist-details-card select, 
+.update-artist-details-card textarea,
+.update-music-details-card input, 
+.update-music-details-card select, 
+.update-music-details-card textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.update-user-details-card input[type="date"],
+.update-artist-details-card input[type="date"],
+.update-music-details-card input[type="date"],
+.update-user-details-card select,
+.update-artist-details-card select,
+.update-music-details-card select {
+    padding: 8px;
+}
+
+.update-user-details-card textarea,
+.update-artist-details-card textarea,
+.update-music-details-card textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.update-user-details-card button,
+.update-artist-details-card button,
+.update-music-details-card button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.update-user-details-card button:hover,
+.update-artist-details-card button:hover,
+.update-music-details-card button:hover {
+    background-color: #45a049;
+}
+
+.update-user-details-card .form-group input[readonly],
+.update-artist-details-card .form-group input[readonly],
+.update-music-details-card .form-group input[readonly],
+.update-user-details-card .form-group textarea[readonly],
+.update-artist-details-card .form-group textarea[readonly],
+.update-music-details-card .form-group textarea[readonly] {
+    background-color: #f7f7f7;
+}
+
+.update-user-details-card .form-group input,
+.update-artist-details-card .form-group input,
+.update-music-details-card .form-group input,
+.update-user-details-card .form-group textarea,
+.update-artist-details-card .form-group textarea,
+.update-music-details-card .form-group textarea {
+    transition: border 0.3s;
+}
+
+.update-user-details-card .form-group input:focus,
+.update-artist-details-card .form-group input:focus,
+.update-music-details-card .form-group input:focus,
+.update-user-details-card .form-group textarea:focus,
+.update-artist-details-card .form-group textarea:focus,
+.update-music-details-card .form-group textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* Specific Adjustments for Artist Form */
+.update-artist-details-card .field-container {
+    grid-template-columns: 1fr 1fr;  /* Two columns for fields */
+}
+
+/* Specific Adjustments for Music Form */
+.update-music-details-card .field-container {
+    grid-template-columns: 1fr 1fr;  /* Two columns for fields */
+}
+
+
+
+.update-btn, 
+.delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect */
+.update-btn:hover, 
+.delete-btn:hover {
+    background-color: darkred;
+    transform: scale(1.05);
+}
+
+/* Active (click) effect */
+.update-btn:active, 
+.delete-btn:active {
+    transform: scale(0.95);
+}
+
+.update-btn {
+    background-color: #007bff; 
+}
+
+.update-btn:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn {
+    background-color: red;
+}

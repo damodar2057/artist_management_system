@@ -6,7 +6,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* Centering the Login Form */
+/* Centering the Register Form */
 .registerForm {
     min-height: 100vh;
     display: flex;
@@ -14,57 +14,94 @@ body {
     justify-content: center;
     align-items: center;
 }
+.registerFields{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);  
+    gap: 1rem 4rem;  
+    grid-template-rows: auto; 
+}
 
+/* Form Styling */
 #register {
     background-color: #f5f3ff;
     box-shadow: 6px 8px 16px rgba(0, 0, 0, 0.2);
-    padding: 4rem 2.4rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
     border-radius: 0.5rem;
-    max-width: 400px;
+    max-width: 500px;
     width: 90%;
 }
 
+/* Form Title */
 .registerTitle {
     text-align: center;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     color: #333;
 }
 
+/* Form Sections */
 .usernameSection,
+.nameSection,
+.contactSection,
+.dobSection,
+.genderSection,
+.roleSection,
+.addressSection,
 .passwordSection {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-input {
+/* Labels */
+label {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Inputs and Textarea */
+input, select, textarea {
     padding: 0.6rem;
     border-radius: 0.5rem;
     border: 1px solid #ccc;
     outline: none;
+    font-size: 0.8rem;
     transition: border-color 0.3s ease;
+    width: 100%;
 }
 
-input:focus {
+
+input:focus, select:focus, textarea:focus {
     border-color: #7f5af0;
 }
 
+/* Gender Dropdown */
+.genderSection select {
+    appearance: none;
+    font-size: 12px;
+    background-color: #fff;
+}
+
+/* Submit Button */
 .registerButton {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    margin-top: 1rem;
 }
 
 button {
-    padding: 0.6rem;
+    padding: 0.8rem;
     border-radius: 0.4rem;
     background-color: #7f5af0;
     color: white;
     border: none;
+    font-size: 1rem;
     cursor: pointer;
+    width: 100%;
     transition: background-color 0.3s ease;
 }
 
@@ -72,10 +109,18 @@ button:hover {
     background-color: #6241c7;
 }
 
+/* Text Section (Login Redirect) */
 .textSection {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
     text-align: center;
     font-size: 0.9rem;
+}
+
+.textSection a {
+    color: #7f5af0;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.textSection a:hover {
+    text-decoration: underline;
 }

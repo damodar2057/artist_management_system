@@ -7,14 +7,15 @@ export const tableConstants = {
         FIRST_NAME: "First Name",
         LAST_NAME: "Last Name",
         EMAIL: "Email",
-        PASSWORD: "Password",
         PHONE: "Phone Number",
         DOB: "Date of Birth",
         GENDER: "Gender",
         ROLE: "User Role",
         ADDRESS: "Address",
         CREATED_AT: "Created At",
-        UPDATED_AT: "Updated At"
+        UPDATED_AT: "Updated At",
+        DELETE: '',
+        UPDATE: ''
     },
     musicTableHeaders: {
         ID: "Music ID",
@@ -23,7 +24,9 @@ export const tableConstants = {
         GENRE: "Genre",
         ARTIST_ID: "Artist ID",
         CREATED_AT: "Created At",
-        UPDATED_AT: "Updated At"
+        UPDATED_AT: "Updated At",
+        DELETE: '',
+        UPDATE: ''
     },
     artistTableHeaders: {
         ID: "Artist ID",
@@ -34,6 +37,8 @@ export const tableConstants = {
         FIRST_RELEASE_YEAR: "First Release Year",
         NO_OF_ALBUMS_RELEASED: "Albums Released",
         CREATED_AT: "Created At",
-        UPDATED_AT: "Updated At"
+        UPDATED_AT: "Updated At",
+        DELETE: '',
+        UPDATE: ''
     }
 };
