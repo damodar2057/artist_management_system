@@ -79,7 +79,7 @@ export class UserModel {
 
     async create(dto: CreateUserDto): Promise<IUserEntity> {
         try {
-            const { first_name, last_name, email, password, phone, dob, gender, address } = dto;
+            const { first_name, last_name, email, password, phone, dob, gender,role,  address } = dto;
 
             const result = await this.dbConnection.query(usersQueries.create, [
                 first_name,
@@ -89,6 +89,7 @@ export class UserModel {
                 phone,
                 dob,
                 gender,
+                role,
                 address
             ]);
 

@@ -23,7 +23,7 @@ export class UserController {
     }
 
 
-    // @PermissionGuard(Permissions.READ_USER)
+    @PermissionGuard(Permissions.READ_USER_ALL)
     async getAllUsers(req: Request): Promise<IPaginatedResult<IUserEntity[]>> {
         try {
             const { page = 1, pageSize = 10, sortBy, sortOrder} = req.query
@@ -42,6 +42,7 @@ export class UserController {
         }
     }
 
+    @PermissionGuard(Permissions.READ_USER_ONE)
     async getUserById(req: Request): Promise<IUserEntity> {
         try {
             const user = await this.userService.fetchUserById(req.params.id);
@@ -54,6 +55,7 @@ export class UserController {
         }
     }
 
+    @PermissionGuard(Permissions.CREATE_USER)
     async createUser(req: Request): Promise<IUserEntity> {
         try {
             return await this.userService.createUser(req.body);
@@ -62,6 +64,7 @@ export class UserController {
         }
     }
 
+    @PermissionGuard(Permissions.UPDATE_USER)
     async updateUser(req: Request): Promise<IUserEntity> {
         try {
             return await this.userService.updateUser(req.params.id, req.body);
@@ -70,6 +73,7 @@ export class UserController {
         }
     }
 
+    @PermissionGuard(Permissions.DELETE_USER)
     async deleteUser(req: Request): Promise<{ message: string }> {
         try {
             await this.userService.deleteUser(req.params.id);

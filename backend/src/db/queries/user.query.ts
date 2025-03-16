@@ -17,7 +17,7 @@ export const usersQueries = {
     },
     findOne: `SELECT * FROM ${DBTables.USER} WHERE ID=$1`,
     findByEmail: `SELECT * FROM ${DBTables.USER} WHERE email=$1`,
-    create: 'INSERT INTO users(first_name, last_name, email, password, phone, dob, gender, address) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *',
+    create: 'INSERT INTO users(first_name, last_name, email, password, phone, dob, gender, role,  address) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *',
     update: `UPDATE users 
             SET 
             first_name = CASE WHEN $1::text IS NOT NULL THEN $1::text ELSE first_name END,

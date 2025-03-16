@@ -1,6 +1,8 @@
 //
 
 import { Request } from "express";
+import { Permissions } from "src/common/constants/permissions.enum";
+import { PermissionGuard } from "src/common/decorators/permission-guard.decorator";
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
 import { IMusicEntity } from "src/common/interfaces/music.interface";
 import { IPaginatedResult } from "src/common/interfaces/paginated-result.interface";
@@ -21,6 +23,7 @@ export class MusicController {
         return MusicController.instance;
     }
 
+    @PermissionGuard(Permissions.READ_MUSIC_ALL)
     async getMusics(req: Request): Promise<IPaginatedResult<IMusicEntity[]>> {
         try {
             const { page = 1, pageSize = 10, sortBy, sortOrder} = req.query
@@ -39,6 +42,7 @@ export class MusicController {
         }
     }
 
+    @PermissionGuard(Permissions.READ_MUSIC_ONE)
     async getMusicById(req: Request): Promise<IMusicEntity> {
         try {
             const music = await this.musicService.fetchMusicById(req.params.id);
@@ -51,6 +55,7 @@ export class MusicController {
         }
     }
 
+    @PermissionGuard(Permissions.CREATE_MUSIC)
     async createMusic(req: Request): Promise<IMusicEntity> {
         try {
             return await this.musicService.createMusic(req.body);
@@ -59,6 +64,7 @@ export class MusicController {
         }
     }
 
+    @PermissionGuard(Permissions.UPDATE_MUSIC)
     async updateMusic(req: Request): Promise<IMusicEntity> {
         try {
             return await this.musicService.updateMusic(req.params.id, req.body);
@@ -67,6 +73,7 @@ export class MusicController {
         }
     }
 
+    @PermissionGuard(Permissions.DELETE_MUSIC)
     async deleteMusic(req: Request): Promise<{ message: string }> {
         try {
             await this.musicService.deleteMusic(req.params.id);

@@ -1,6 +1,8 @@
 //
 
 import { Request } from "express";
+import { Permissions } from "src/common/constants/permissions.enum";
+import { PermissionGuard } from "src/common/decorators/permission-guard.decorator";
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
 import { IArtistEntity } from "src/common/interfaces/artist.interface";
 import { IPaginatedResult } from "src/common/interfaces/paginated-result.interface";
@@ -20,25 +22,26 @@ export class ArtistController {
         }
         return ArtistController.instance;
     }
-
-        async getArtists(req: Request): Promise<IPaginatedResult<IArtistEntity[]>> {
-            try {
-                const { page = 1, pageSize = 10, sortBy, sortOrder} = req.query
-                const {data, total} =  await this.artistService.fetchAllArtists(req.query);
-                return {
-                    data: data,
-                    pagination: {
-                        currentPage: +page,
-                        itemsPerPage: +pageSize,
-                        totalItems: total,
-                        totalPages: Math.ceil(total / +pageSize),
-                    }
+    @PermissionGuard(Permissions.READ_ARTIST_ALL)
+    async getArtists(req: Request): Promise<IPaginatedResult<IArtistEntity[]>> {
+        try {
+            const { page = 1, pageSize = 10, sortBy, sortOrder } = req.query
+            const { data, total } = await this.artistService.fetchAllArtists(req.query);
+            return {
+                data: data,
+                pagination: {
+                    currentPage: +page,
+                    itemsPerPage: +pageSize,
+                    totalItems: total,
+                    totalPages: Math.ceil(total / +pageSize),
                 }
-            } catch (error) {
-                throw error;
             }
+        } catch (error) {
+            throw error;
         }
+    }
 
+    @PermissionGuard(Permissions.READ_ARTIST_ONE)
     async getArtistById(req: Request): Promise<IArtistEntity> {
         try {
             const artist = await this.artistService.fetchArtistById(req.params.id);
@@ -51,6 +54,7 @@ export class ArtistController {
         }
     }
 
+    @PermissionGuard(Permissions.CREATE_ARTIST)
     async createArtist(req: Request): Promise<IArtistEntity> {
         try {
             return await this.artistService.createArtist(req.body);
@@ -59,6 +63,7 @@ export class ArtistController {
         }
     }
 
+    @PermissionGuard(Permissions.UPDATE_ARTIST)
     async updateArtist(req: Request): Promise<IArtistEntity> {
         try {
             return await this.artistService.updateArtist(req.params.id, req.body);
@@ -67,6 +72,7 @@ export class ArtistController {
         }
     }
 
+    @PermissionGuard(Permissions.DELETE_ARTIST)
     async deleteArtist(req: Request): Promise<{ message: string }> {
         try {
             await this.artistService.deleteArtist(req.params.id);

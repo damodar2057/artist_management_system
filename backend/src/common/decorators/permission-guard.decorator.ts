@@ -14,6 +14,7 @@ export function PermissionGuard(requiredPermission: Permissions) {
             try {
                 const request: Request = args[0]; // Get the first argument (the request)
                 const currentUser = request['user']; // Assuming user is added to the request
+                console.log(currentUser)
                 const existingPermissions = PermissionMapping[currentUser?.role];
 
                 if (!existingPermissions || !existingPermissions.includes(requiredPermission)) {
