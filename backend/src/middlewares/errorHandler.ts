@@ -3,6 +3,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 import { ErrorCodes } from 'src/common/constants/error-codes.enum';
+import logger from 'src/common/logger/logger';
 import appConfig from 'src/config/app.config';
 
 function errorHandler(error: any, req: Request, res: Response, next: NextFunction) {
@@ -13,8 +14,7 @@ function errorHandler(error: any, req: Request, res: Response, next: NextFunctio
   const statusCode = error.statusCode || 500;
   const message = error.message || 'Internal Server Error';
 
-  // Send a structured error response
-  res.status(statusCode).json({
+  const err = {
     success: 'false',
     code: error.code || ErrorCodes.INTERNAL_ERROR,
     statusCode,
@@ -22,7 +22,10 @@ function errorHandler(error: any, req: Request, res: Response, next: NextFunctio
     path: req.originalUrl,
     timestamp: new Date().toISOString(),
     details: appConfig.node_env === 'development' ? error.stack.split('\n').slice(0,2).join(' ') : null
-  });
+  }
+  logger.error(err)
+  // Send a structured error response
+  res.status(statusCode).json(err);
 }
 
 export default errorHandler;

@@ -3,6 +3,7 @@
 
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
 import { IArtistEntity } from "src/common/interfaces/artist.interface";
+import { IPaginationOptions } from "src/common/interfaces/pagination-options.interface";
 import { CreateArtistDto } from "src/dtos/artist.dto";
 import { ArtistModel } from "src/models/artistModel";
 
@@ -33,9 +34,9 @@ export class ArtistService {
         }
     }
 
-    public async fetchAllArtists(): Promise<IArtistEntity[]> {
+    public async fetchAllArtists(options: IPaginationOptions): Promise<{data: IArtistEntity[], total: number}> {
         try {
-            return await this.repository.findAll();
+            return await this.repository.findAll(options);
         } catch (error) {
             throw error;
         }
@@ -58,8 +59,7 @@ export class ArtistService {
             }
 
             const updatedArtist = await this.repository.update(artistId, dto);
-            return null;
-            // return updatedArtist;
+            return updatedArtist;
         } catch (error) {
             throw error;
         }

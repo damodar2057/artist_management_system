@@ -2,8 +2,8 @@
 
 export enum DBTables {
     MUSIC='music',
-    USER='user',
-    ARTIST='artist',
+    USER='users',
+    ARTIST='artists',
     MIGRATIONS='migrations'
 }
 

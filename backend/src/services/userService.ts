@@ -1,6 +1,8 @@
 // backend/src/services/userService.ts
 
+import { BadRequestException } from "src/common/exceptions/badRequest.exception";
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
+import { IPaginationOptions } from "src/common/interfaces/pagination-options.interface";
 import { IUserEntity } from "src/common/interfaces/user.interface";
 import { CreateUserDto } from "src/dtos/user.dto";
 import { UserModel } from "src/models/userModels";
@@ -32,9 +34,9 @@ export class UserService {
         }
     }
 
-    public async fetchAllUsers(): Promise<IUserEntity[]> {
+    public async fetchAllUsers(options: IPaginationOptions): Promise<{ data: IUserEntity[], total: number}> {
         try {
-            return await this.repository.findAll();
+            return await this.repository.findAll(options);
         } catch (error) {
             throw error;
         }
@@ -42,6 +44,10 @@ export class UserService {
 
     public async createUser(dto: CreateUserDto): Promise<IUserEntity | null> {
         try {
+            const existingUser = await this.repository.findByEmail(dto.email);
+            if(existingUser){
+                throw new BadRequestException(`User with email ${dto.email} already exists!!`)
+            }
             const user = await this.repository.create(dto);
             return user;
         } catch (error) {
@@ -57,7 +63,7 @@ export class UserService {
             }
 
             const updatedUser = await this.repository.update(userId, dto);
-            return null;
+            return updatedUser;
         } catch (error) {
             throw error;
         }

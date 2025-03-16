@@ -4,6 +4,7 @@ import { Request } from "express";
 import { Permissions } from "src/common/constants/permissions.enum";
 import { PermissionGuard } from "src/common/decorators/permission-guard.decorator";
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
+import { IPaginatedResult } from "src/common/interfaces/paginated-result.interface";
 import { IUserEntity } from "src/common/interfaces/user.interface"
 import { UserService } from "src/services/userService"
 
@@ -23,9 +24,19 @@ export class UserController {
 
 
     // @PermissionGuard(Permissions.READ_USER)
-    async getAllUsers(req: Request): Promise<IUserEntity[]> {
+    async getAllUsers(req: Request): Promise<IPaginatedResult<IUserEntity[]>> {
         try {
-            return await this.userService.fetchAllUsers();
+            const { page = 1, pageSize = 10, sortBy, sortOrder} = req.query
+            const { data, total} = await this.userService.fetchAllUsers(req.query);
+            return {
+                data: data,
+                pagination: {
+                    currentPage: +page,
+                    itemsPerPage: +pageSize,
+                    totalItems: total,
+                    totalPages: Math.ceil(total / +pageSize),
+                }
+            }
         } catch (error) {
             throw error;
         }

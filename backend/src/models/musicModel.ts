@@ -1,52 +1,64 @@
 //
 
 import { Pool } from "pg";
+import { DBTables } from "src/common/constants/db-tables.enum";
 import { IMusicEntity } from "src/common/interfaces/music.interface";
+import { IPaginationOptions } from "src/common/interfaces/pagination-options.interface";
+import { QueryOptions } from "src/common/types/query-options.type";
 import db from 'src/db'
 import { musicQueries } from "src/db/queries/music.query";
-import { CreateMusicDto } from "src/dtos/music.dto";
+import { CreateMusicDto, UpdateMusicDto } from "src/dtos/music.dto";
 
 
 export class MusicModel {
     private dbConnection: Pool;
     private static instance: MusicModel;  // singleton instance
-    private constructor(){
+    private constructor() {
         this.dbConnection = db.getInstance().getPool()
     }
-    
-    public static getInstance(){
-        if(!MusicModel.instance){
-            MusicModel.instance  = new MusicModel();
+
+    public static getInstance() {
+        if (!MusicModel.instance) {
+            MusicModel.instance = new MusicModel();
         }
         return MusicModel.instance;
     }
-    
-    
-    async findAll(): Promise<IMusicEntity[]> {
+
+
+    async findAll(options: IPaginationOptions): Promise<{ data: IMusicEntity[], total: number }> {
         try {
-            return (await this.dbConnection.query(musicQueries.findAll)).rows
+            const data = (await this.dbConnection.query(musicQueries.findAll(options)))
+            return { data: data.rows, total:  (await this.dbConnection.query(`SELECT * FROM ${DBTables.MUSIC}`)).rowCount }
         } catch (error) {
             throw error
         }
     }
-    
+
     async findOne(id: string): Promise<IMusicEntity> {
         try {
-            return (await this.dbConnection.query(musicQueries.findOne,[id])).rows[0]
+            return (await this.dbConnection.query(musicQueries.findOne, [id])).rows[0]
         } catch (error) {
             throw error
         }
     }
     async findById(id: string): Promise<IMusicEntity> {
         try {
-            return (await this.dbConnection.query(musicQueries.findOne,[id])).rows[0]
+            return (await this.dbConnection.query(musicQueries.findOne, [id])).rows[0]
         } catch (error) {
             throw error
         }
     }
-    async update(id: string, dto: any) {
+    async update(id: string, dto: UpdateMusicDto) {
         try {
-            // await (await this.dbConnection.query(musicQueries.update))
+            const result = await this.dbConnection.query(musicQueries.update, [
+                dto.title || null,
+                dto.album_name || null,
+                dto.genre || null,
+                dto.artist_id || null,
+                id
+
+            ])
+            return result.rows[0]
         } catch (error) {
             throw error
         }
@@ -54,13 +66,12 @@ export class MusicModel {
 
     async create(dto: CreateMusicDto): Promise<IMusicEntity> {
         try {
-            const { album_name,artist_id,genre, title } = dto;
 
             const result = await this.dbConnection.query(musicQueries.create, [
-                album_name, 
-                artist_id, 
-                genre, 
-                title, 
+                dto.title,
+                dto.album_name,
+                dto.genre,
+                dto.artist_id,
             ]);
 
             const newUser = result.rows[0];
@@ -73,7 +84,7 @@ export class MusicModel {
 
     async delete(id: string): Promise<boolean> {
         const result = await this.dbConnection.query(musicQueries.delete, [id]);
-        return result.rowCount > 0; 
+        return result.rowCount > 0;
     }
 
 

@@ -3,6 +3,7 @@
 import { Request } from "express";
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
 import { IArtistEntity } from "src/common/interfaces/artist.interface";
+import { IPaginatedResult } from "src/common/interfaces/paginated-result.interface";
 import { ArtistService } from "src/services/artistService";
 
 export class ArtistController {
@@ -20,13 +21,23 @@ export class ArtistController {
         return ArtistController.instance;
     }
 
-    async getArtists(req: Request): Promise<IArtistEntity[]> {
-        try {
-            return await this.artistService.fetchAllArtists();
-        } catch (error) {
-            throw error;
+        async getArtists(req: Request): Promise<IPaginatedResult<IArtistEntity[]>> {
+            try {
+                const { page = 1, pageSize = 10, sortBy, sortOrder} = req.query
+                const {data, total} =  await this.artistService.fetchAllArtists(req.query);
+                return {
+                    data: data,
+                    pagination: {
+                        currentPage: +page,
+                        itemsPerPage: +pageSize,
+                        totalItems: total,
+                        totalPages: Math.ceil(total / +pageSize),
+                    }
+                }
+            } catch (error) {
+                throw error;
+            }
         }
-    }
 
     async getArtistById(req: Request): Promise<IArtistEntity> {
         try {

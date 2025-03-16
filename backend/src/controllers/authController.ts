@@ -18,7 +18,7 @@ export class AuthController {
         return AuthController.instance;
     }
 
-    async login(req: Request): Promise<{ accessToken: string}> {
+    async login(req: Request): Promise<{ accessToken: string,expiresIn: number}> {
         try {
             return await this.authService.login(req.body);
         } catch (error) {

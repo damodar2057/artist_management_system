@@ -11,3 +11,13 @@ export interface CreateArtistDto {
     first_release_year?: number;
     no_of_albums_released: number;
 }
+
+
+export interface UpdateArtistDto {
+    name?: string;
+    dob?: Date;
+    gender?: Gender;
+    address?: string;
+    first_release_year?: number;
+    no_of_albums_released?: number;
+}

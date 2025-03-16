@@ -3,6 +3,7 @@
 import { Request } from "express";
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
 import { IMusicEntity } from "src/common/interfaces/music.interface";
+import { IPaginatedResult } from "src/common/interfaces/paginated-result.interface";
 import { MusicService } from "src/services/musicService";
 
 export class MusicController {
@@ -20,9 +21,19 @@ export class MusicController {
         return MusicController.instance;
     }
 
-    async getMusics(req: Request): Promise<IMusicEntity[]> {
+    async getMusics(req: Request): Promise<IPaginatedResult<IMusicEntity[]>> {
         try {
-            return await this.musicService.fetchAllMusics();
+            const { page = 1, pageSize = 10, sortBy, sortOrder} = req.query
+            const {data, total} =  await this.musicService.fetchAllMusics(req.query);
+            return {
+                data: data,
+                pagination: {
+                    currentPage: +page,
+                    itemsPerPage: +pageSize,
+                    totalItems: total,
+                    totalPages: Math.ceil(total / +pageSize),
+                }
+            }
         } catch (error) {
             throw error;
         }

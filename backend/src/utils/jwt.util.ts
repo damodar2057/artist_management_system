@@ -6,7 +6,7 @@ import appConfig from 'src/config/app.config'
 
 export async function signJwtToken(payload: IJwtPayload){
     return jwt.sign(payload, appConfig.jwtSecretKey, {
-        expiresIn: +appConfig.jwtExpiryInterval
+        expiresIn: +appConfig.jwtExpiryInterval || 12
     })
 }
 export async function verifyJwtToken(token: string): Promise<IJwtPayload> {

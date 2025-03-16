@@ -1,10 +1,12 @@
 // backend/src/models/artistModel.ts
 
 import { Pool } from "pg";
+import { DBTables } from "src/common/constants/db-tables.enum";
 import { IArtistEntity } from "src/common/interfaces/artist.interface";
+import { IPaginationOptions } from "src/common/interfaces/pagination-options.interface";
 import db from 'src/db'
 import { artistQueries } from "src/db/queries/artist.query";
-import { CreateArtistDto } from "src/dtos/artist.dto";
+import { CreateArtistDto, UpdateArtistDto } from "src/dtos/artist.dto";
 
 
 
@@ -23,9 +25,10 @@ export class ArtistModel {
     }
     
     
-    async findAll(): Promise<IArtistEntity[]> {
+    async findAll(queryOptions: IPaginationOptions): Promise<{data: IArtistEntity[], total: number}> {
         try {
-            return (await this.dbConnection.query(artistQueries.findAll)).rows
+            const  data =  (await this.dbConnection.query(artistQueries.findAll(queryOptions)))
+            return {data: data.rows, total: (await this.dbConnection.query(`SELECT * FROM ${DBTables.ARTIST}`)).rowCount}
         } catch (error) {
             throw error
         }
@@ -45,9 +48,19 @@ export class ArtistModel {
             throw error
         }
     }
-    async update(id: string, dto: any) {
+    async update(id: string, dto: UpdateArtistDto) {
         try {
-            // await (await this.dbConnection.query(artistQueries.update))
+           const result = await this.dbConnection.query(artistQueries.update, [
+            dto.name,
+            dto.dob,
+            dto.gender,
+            dto.address,
+            dto.first_release_year,
+            dto.no_of_albums_released,
+            id
+           ])
+
+           return result.rows[0]
         } catch (error) {
             throw error
         }

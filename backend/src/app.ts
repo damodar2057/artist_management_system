@@ -49,8 +49,8 @@ async function startServer() {
     
     // Application routes
     app.use('/api/v1/auth', authRoutes);
-    app.use('/api/v1/user', authMiddleware,userRoutes);
-    app.use('/api/v1/artist',authMiddleware, artistRoutes);
+    app.use('/api/v1/user', authMiddleware, userRoutes);
+    app.use('/api/v1/artist',authMiddleware,  artistRoutes);
     app.use('/api/v1/music',authMiddleware, musicRoutes);
     
     app.use(errorHandler);

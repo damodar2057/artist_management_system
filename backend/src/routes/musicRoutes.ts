@@ -33,7 +33,7 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.delete('/', async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
     try {
         const result = await musicController.deleteMusic(req);
         res.json(result);
@@ -42,7 +42,7 @@ router.delete('/', async (req, res, next) => {
     }
 });
 
-router.patch('/', async (req, res, next) => {
+router.patch('/:id', async (req, res, next) => {
     try {
         const updatedMusic = await musicController.updateMusic(req);
         res.json(updatedMusic);
