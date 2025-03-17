@@ -23,6 +23,7 @@ CREATE TABLE artists (
     address VARCHAR(255) NOT NULL,
     first_release_year INT NOT NULL,
     no_of_albums_released INT NOT NULL,
+    -- user_id INT UNIQUE REFERENCES users(id) ON DELETE NULL,  
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP  NULL 
 );

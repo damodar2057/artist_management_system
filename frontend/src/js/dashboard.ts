@@ -7,7 +7,7 @@ import { CreateArtistForm } from "../components/form/artist-form";
 import { CreateMusicForm } from "../components/form/music.form";
 import getMusicsTableHtml from "../components/tables/music.table";
 import { getArtistsTable } from "../components/tables/artist.table";
-import { setActiveLink } from "../utils/dom";
+import { loadNavbar, setActiveLink } from "../utils/dom";
 import attachUserFormListener from "./create-user";
 import attachArtistFormListener from "./create-artist";
 import attachMusicFormListener from "./create-music";
@@ -17,12 +17,25 @@ import loadUpdateUserDetailsComponent from "../components/cards/update-user-deta
 import artistApiManager from "../apis/artist.api";
 import musicApiManager from "../apis/music.api";
 import { IResponse } from "../common/interfaces/response.interface";
-// import { IErrorMessage } from "common/interfaces/error-response.interface";
 import toastComponent from "../components/toast/toastComponent";
 import loadUpdateArtistDetailsComponent from "../components/cards/update-artist-details";
 import loadUpdateMusicDetailsComponent from "../components/cards/update-music-details";
 import { loadArtistDetailsCard } from "../components/cards/artist-details";
 import { loadMusicDetailsCard } from "../components/cards/music-details";
+import { UserRoles } from "../common/constants/user-role.enum";
+import { Gender } from "../common/constants/gender.enum";
+import { IArtist, IUpdateArtist } from "../common/interfaces/artist.interface";
+import { IMusic, IUpdateMusic } from "../common/interfaces/music.interface";
+import { Genre } from "../common/constants/genre.enum";
+import { getTokenPayload } from "../utils/jwt-decode";
+import { IJwtPayload } from "../common/interfaces/jwt.payload";
+import { IPaginationResponse } from "../common/interfaces/pagination.interface";
+import { renderPagination } from "../components/cards/pagination-component";
+import { exportArtistDataToCSV } from "./artist";
+import { parseCSVToJson } from "../utils/parse-csv-to-json"
+import loadDiscoverSongsTable from "../components/tables/discover-songs";
+import loadViewSongsByArtistIdTable from "../components/tables/view-songs-by-artistId";
+
 
 // DOM Elements
 const usersLink = document.getElementById("users-link") as HTMLAnchorElement;
@@ -32,7 +45,13 @@ const createRecButton = document.getElementById("createRecButton") as HTMLButton
 const contentContainer = document.getElementById("content") as HTMLElement;
 const breadcrumbElement = document.getElementById("breadcrumbText") as HTMLParagraphElement;
 const goBackButton = document.querySelector(".goBackButton button") as HTMLButtonElement;
+const navbarUsernameElement = document.querySelector(".right-container .navbar #userWelcome") as HTMLSpanElement;
+const musicLiElement = document.getElementById('musics-link-id') as HTMLLIElement
+const artistLiElement = document.getElementById('artists-link-id') as HTMLLIElement
+const userLiElement = document.getElementById('users-link-id') as HTMLLIElement
+const recommendedSongsLink = document.getElementById('recommended-songs-link') as HTMLAnchorElement
 
+const decoded: IJwtPayload | null = getTokenPayload()
 
 // Utility functions
 function updateContent(content: string) {
@@ -45,97 +64,210 @@ function setBreadCrumb(activeLink: HTMLAnchorElement) {
 
 // Fetch and Load Data on Page Load
 window.onload = async () => {
-    setActiveLink(usersLink)
-    setBreadCrumb(usersLink)
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
         window.location.href = "login.html"; // Redirect if not logged in
     }
-
+    loadNavbar(navbarUsernameElement);
     contentContainer.innerHTML = getLoaderHtml();
 
-    try {
-        const res: IResponse<any> = (await userApiManager.fetchUsersData());
+    if (!decoded) {
+        // show the loader in whole page
+    }
 
-        if (res.data) {
-            updateContent(getUsersTableHtml(res.data));
-            attachGetUserByIdListener()
-            attachUpdateBtnListener()
-            attachDeleteBtnListener()
+    switch (decoded?.role) {
+        case UserRoles.SUPER_ADMIN:
+
+            musicLiElement.style.display = 'block'
+            artistLiElement.style.display = 'block'
+            userLiElement.style.display = 'block'
+
+            break
+        case UserRoles.ARTIST_MANAGER:
+            artistLiElement.style.display = 'block'
+            musicLiElement.style.display = 'block'
+
+            break
+        case UserRoles.ARTIST:
+            musicLiElement.style.display = 'block'
+            break
+    }
+
+    loadInitialData()
+};
+
+async function loadInitialData() {
+    recommendedSongsLink.click()
+    setActiveLink(recommendedSongsLink)
+    setBreadCrumb(recommendedSongsLink)
+}
+
+
+recommendedSongsLink.addEventListener("click", async (ev) => {
+    contentContainer.innerHTML = getLoaderHtml();
+    (document.querySelector(".main-content .createRecordBtnContainer") as HTMLDivElement).style.display = 'none'
+    await fetchRecommendedSongs(1); // Start from page 1
+    setActiveLink(recommendedSongsLink);
+    setBreadCrumb(recommendedSongsLink);
+});
+
+
+async function fetchRecommendedSongs(page: number = 1) {
+    try {
+        const res: IResponse<any> = await musicApiManager.fetchMusic(page); // Fetch paginated data
+        if (res.data && res.data.length > 0) {
+
+            updateContent(loadDiscoverSongsTable(res.data))
+
+            renderPagination("pagination-container", res.pagination as IPaginationResponse, fetchRecommendedSongs);
 
         }
     } catch (error) {
         console.error("Error fetching data:", error);
         contentContainer.innerHTML = "<p>Failed to load data.</p>";
     }
-};
-
-// Event Listeners for Navigation Links
+}
 usersLink.addEventListener("click", async () => {
-    contentContainer.innerHTML = getLoaderHtml();
-    const res: IResponse<any> = (await userApiManager.fetchUsersData());
-    if (res.data) {
-        updateContent(getUsersTableHtml(res.data));
-        attachGetUserByIdListener()
-        attachUpdateBtnListener()
-        attachDeleteBtnListener()
-
-    }
+        contentContainer.innerHTML = getLoaderHtml();
+    (document.querySelector(".main-content .createRecordBtnContainer") as HTMLDivElement).style.display = 'flex'
+    await fetchAndRenderUsers(1); // Start from page 1
     setActiveLink(usersLink);
-    setBreadCrumb(usersLink)
-
+    setBreadCrumb(usersLink);
 });
+async function fetchAndRenderUsers(page: number = 1) {
+    const res: IResponse<any> = await userApiManager.fetchUsersData(page); // Fetch paginated data
+
+    if (res.data && res.data.length > 0) {
+        updateContent(getUsersTableHtml(res.data));
+        attachCreateRecordListener()
+        attachGetUserByIdListener();
+        attachUpdateBtnListener();
+        attachDeleteBtnListener();
+        renderPagination("pagination-container", res.pagination as IPaginationResponse, fetchAndRenderUsers);
+    }
+}
+
+
+
+
+async function attachExportArtistListener() {
+    const exportArtistButton = document.getElementById('export-artist-button') as HTMLButtonElement;
+    if (exportArtistButton) {
+        exportArtistButton.addEventListener('click', async (ev) => {
+            ev.preventDefault();
+            // export the records
+            const res: IResponse<IArtist[]> = await artistApiManager.fetchExportArtistData(); // Fetch paginated data
+            exportArtistDataToCSV('artist', res.data as any[])
+
+        })
+    }
+
+}
+
+async function attachImportArtistDataListener() {
+    document.getElementById("import-artist-button")?.addEventListener('click', () => {
+        const fileInput = document.getElementById("artistCsvInput") as HTMLInputElement;
+        fileInput.click()
+
+        fileInput.onchange = async function () {
+            if (!fileInput.files || fileInput.files.length === 0) return;
+
+            const file = fileInput.files[0];
+            console.log(file);
+
+            const reader = new FileReader();
+
+            reader.onload = async function (e) {
+                const csvText = e.target?.result as string;
+                console.log(csvText);
+                const jsonData = parseCSVToJson(csvText);
+
+                console.log(`Parsed data is::${jsonData}`);
+
+                try {
+                    const response = await artistApiManager.postImportArtists(jsonData);
+                    if (response.success) {
+                        toastComponent("Artists Imported Successfully!!", 'success');
+                    }
+                    artistsLink.click()
+                } catch (error) {
+                    toastComponent("Error Importing artists", "error");
+                }
+            }
+
+            // Start reading the file as text
+            reader.readAsText(file);
+        }
+    })
+}
 
 artistsLink.addEventListener("click", async () => {
     contentContainer.innerHTML = getLoaderHtml();
-    try {
-        const res: IResponse<any> = await artistApiManager.fetchArtists();
-        if (res?.data) {
-            updateContent(getArtistsTable(res.data));
-            toastComponent(`${res.message}`, 'success');
-            attachGetArtistByIdListener()
-        }
-    } catch (error: any) {
-        toastComponent(error.message, 'error')
-
-    }
+    (document.querySelector(".main-content .createRecordBtnContainer") as HTMLDivElement).style.display = 'flex'
+    await fetchAndRenderArtists(1); // Start from page 1
     setActiveLink(artistsLink);
-    setBreadCrumb(artistsLink)
-
+    setBreadCrumb(artistsLink);
 });
+async function fetchAndRenderArtists(page: number) {
+    contentContainer.innerHTML = getLoaderHtml();
+    const res: IResponse<any> = await artistApiManager.fetchArtists(page); // Fetch paginated data
+
+    if (res.data && res.data.length > 0) {
+        attachCreateRecordListener()
+        updateContent(getArtistsTable(res.data));
+        attachGetArtistByIdListener();
+        attachUpdateBtnListener();
+        attachDeleteBtnListener();
+        await attachExportArtistListener()
+        await attachImportArtistDataListener()
+        attachViewArtistSongsListener()
+        renderPagination("pagination-container", res.pagination as IPaginationResponse, fetchAndRenderArtists);
+    }
+}
+
 
 musicLink.addEventListener("click", async () => {
     contentContainer.innerHTML = getLoaderHtml();
-    try {
-        const res: IResponse<any> = await musicApiManager.fetchMusic();
-        if (res.data) {
-            updateContent(getMusicsTableHtml(res.data));
-            toastComponent(`${res.message}`, 'success');
-            attachGetMusicByIdListener()
-        }
-    } catch (error: any) {
-        toastComponent(error.message, 'error')
-    }
+    (document.querySelector(".main-content .createRecordBtnContainer") as HTMLDivElement).style.display = 'flex'
+    await fetchAndRenderMusic(1); // Fetch and render music
     setActiveLink(musicLink);
-    setBreadCrumb(musicLink)
-
+    setBreadCrumb(musicLink);
 });
 
-// Event Listener for Create Button 
-createRecButton.addEventListener("click", () => {
-    // createButton.style.display = "none"; // Hides the button
-    if (usersLink.classList.contains("active")) {
-        updateContent(CreateUserForm());
-        attachUserFormListener(); // as we are inserting form after DOM is loaded
-    } else if (artistsLink.classList.contains("active")) {
-        updateContent(CreateArtistForm());
-        attachArtistFormListener()
-    } else if (musicLink.classList.contains("active")) {
-        updateContent(CreateMusicForm());
-        attachMusicFormListener()
+async function fetchAndRenderMusic(page: number) {
+    contentContainer.innerHTML = getLoaderHtml();
+    const res: IResponse<any> = await musicApiManager.fetchMusic(page); // Fetch music data
+
+    if (res.data && res.data.length > 0) {
+        attachCreateRecordListener();
+        updateContent(getMusicsTableHtml(res.data));
+        attachGetMusicByIdListener();
+        attachUpdateBtnListener();
+        attachDeleteBtnListener();
+        renderPagination("pagination-container", res.pagination as IPaginationResponse, fetchAndRenderMusic);
+
     }
+}
 
-});
+
+// Event Listener for Create Button
+function attachCreateRecordListener() {
+
+    createRecButton.addEventListener("click", async () => {
+        // createButton.style.display = "none"; // Hides the button
+        if (usersLink.classList.contains("active")) {
+            updateContent(CreateUserForm());
+            attachUserFormListener(); // as we are inserting form after DOM is loaded
+        } else if (artistsLink.classList.contains("active")) {
+            updateContent(CreateArtistForm());
+            attachArtistFormListener()
+        } else if (musicLink.classList.contains("active")) {
+            updateContent(await CreateMusicForm(decoded?.role as UserRoles));
+            attachMusicFormListener()
+        }
+        
+    });
+}
 
 // Event listener for go back button
 goBackButton.addEventListener('click', (ev) => {
@@ -269,7 +401,7 @@ function attachUpdateBtnListener() {
             console.log(`Update request music id is ${musicId}`)
             const music = (await musicApiManager.getMusicById(musicId))?.data
             contentContainer.innerHTML = loadUpdateMusicDetailsComponent(music)
-            updateMusicListener(music)
+            updateMusicListener(musicId)
         })
     })
 
@@ -279,10 +411,68 @@ function attachUpdateBtnListener() {
 
 // Update Listeners
 function updateArtistListener(artistId: string) {
+    const form = document.querySelector("#update-artist-form") as HTMLFormElement;
 
+    if (!form) {
+        console.warn("Update artist form not found.");
+        return;
+    }
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault(); // Prevent default form submission behavior
+
+        const formData: IUpdateArtist = {
+            name: (form.querySelector("#artist-name") as HTMLInputElement).value,
+            dob: new Date((form.querySelector("#dob") as HTMLInputElement).value),
+            gender: (form.querySelector("#gender") as HTMLInputElement).value as Gender,
+            address: (form.querySelector("#address") as HTMLInputElement).value,
+            first_release_year: +(form.querySelector("#firstReleaseYear") as HTMLInputElement).value,
+            no_of_albums_released: +(form.querySelector("#albums") as HTMLInputElement).value,
+
+        };
+
+        console.log("User Data:", formData);
+
+        try {
+            await artistApiManager.updateArtist(artistId, formData); // Assuming an API call
+            toastComponent("Artist updated successfully!", "success");
+            artistsLink.click()
+        } catch (error) {
+            console.error("Failed to update artist:", error);
+            toastComponent("Error updating artist.", 'error');
+        }
+    });
 }
 function updateMusicListener(musicId: string) {
+    const form = document.querySelector("#update-music-form") as HTMLFormElement;
 
+    if (!form) {
+        console.warn("Update artist form not found.");
+        return;
+    }
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault(); // Prevent default form submission behavior
+
+        const formData: IUpdateMusic = {
+            title: (form.querySelector(".update-music-details-card form #title") as HTMLInputElement).value,
+            album_name: (form.querySelector(".update-music-details-card form  #album_name") as HTMLInputElement).value,
+            genre: (form.querySelector(".update-music-details-card form  #genre") as HTMLInputElement).value as Genre,
+            artist_id: (form.querySelector(".update-music-details-card form #artist") as HTMLInputElement).value,
+
+        };
+
+        console.log("User Data:", formData);
+
+        try {
+            await musicApiManager.updateMusic(musicId, formData); // Assuming an API call
+            toastComponent("Music updated successfully!", "success");
+            musicLink.click()
+        } catch (error: any) {
+            console.error("Failed to update music:", error);
+            toastComponent(`Error: ${error.message}`);
+        }
+    });
 }
 
 
@@ -311,8 +501,18 @@ function updateUserListener(userId: string) {
         console.log("User Data:", formData);
 
         try {
-            await userApiManager.updateUser(userId, formData); // Assuming an API call
-            alert("User updated successfully!");
+            await userApiManager.updateUser(userId, {
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                email: formData.email,
+                phone: formData.phone,
+                dob: formData.dob,
+                role: formData.role as UserRoles,
+                gender: formData.gender as Gender,
+                address: formData.address
+            }); // Assuming an API call
+            toastComponent("User updated successfully!", "success");
+            usersLink.click()
         } catch (error) {
             console.error("Failed to update user:", error);
             alert("Error updating user.");
@@ -357,6 +557,7 @@ function attachDeleteBtnListener() {
     })
     document.querySelectorAll('#music-table .delete-btn').forEach(btn => {
         btn.addEventListener('click', async (ev) => {
+            console.log("Delete btn for music is called")
             ev.preventDefault()
             contentContainer.innerHTML = getLoaderHtml();
             const musicId = (ev.target as HTMLElement).getAttribute('data-id') as string;
@@ -372,6 +573,34 @@ function attachDeleteBtnListener() {
         })
     })
 
+}
+
+
+function attachViewArtistSongsListener(){
+    document.querySelectorAll('#artist-table .list-artist-songs-btn').forEach(btn => {
+        btn.addEventListener('click', async (ev) => {
+            console.log("View song btn for artist is called")
+            console.log("View song btn for artist is called")
+            console.log("View song btn for artist is called")
+            ev.preventDefault()
+            contentContainer.innerHTML = getLoaderHtml();
+            const artistId = (ev.target as HTMLElement).getAttribute('data-id') as string;
+            try {
+
+                const res: IResponse<IMusic[]> = await musicApiManager.getMusicsByArtistId(artistId) as IResponse<IMusic[]>
+                console.log(res.data);
+                if (res?.data) {
+                    contentContainer.innerHTML = loadViewSongsByArtistIdTable(res.data)
+                    goBackButton.style = 'block'
+                }
+            } catch (error: any) {
+                toastComponent(error.message, 'error')
+            }
+            // contentContainer.innerHTML = ''
+            // artistsLink.click() // in this i want to do click event 
+        })
+    })
+ 
 }
 
 

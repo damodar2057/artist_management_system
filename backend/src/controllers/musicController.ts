@@ -26,8 +26,28 @@ export class MusicController {
     @PermissionGuard(Permissions.READ_MUSIC_ALL)
     async getMusics(req: Request): Promise<IPaginatedResult<IMusicEntity[]>> {
         try {
-            const { page = 1, pageSize = 10, sortBy, sortOrder} = req.query
+            const { page = 1, pageSize = 10, sortBy, sortOrder, artist_id} = req.query
             const {data, total} =  await this.musicService.fetchAllMusics(req.query);
+            return {
+                data: data,
+                pagination: {
+                    currentPage: +page,
+                    itemsPerPage: +pageSize,
+                    totalItems: total,
+                    totalPages: Math.ceil(total / +pageSize),
+                }
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @PermissionGuard(Permissions.READ_MUSIC_ALL)
+    async getMusicsByArtistId(req: Request): Promise<IPaginatedResult<IMusicEntity[]>> {
+        try {
+            
+            const { page = 1, pageSize = 10, sortBy, sortOrder} = req.query
+            const {data, total} =  await this.musicService.fetchAllMusicsByArtistId(req.query, req.params.artist_id);
             return {
                 data: data,
                 pagination: {

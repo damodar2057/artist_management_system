@@ -1,0 +1,11 @@
+name,dob,gender,address,first_release_year,no_of_albums_released
+"Artist Name 1","1990-01-01","Male","Address 1",2005,5
+"Artist Name 2","1992-05-12","Female","Address 2",2010,3
+"Artist Name 3","1985-09-23","Male","Address 3",2000,8
+"Artist Name 4","1989-06-15","Female","Address 4",2008,6
+"Artist Name 5","1995-12-04","Non-Binary","Address 5",2015,2
+"Artist Name 6","1982-02-17","Male","Address 6",2002,10
+"Artist Name 7","1975-11-30","Female","Address 7",1999,12
+"Artist Name 8","2000-07-22","Male","Address 8",2020,1
+"Artist Name 9","1993-03-09","Female","Address 9",2012,4
+"Artist Name 10","1988-01-11","Male","Address 10",2006,7

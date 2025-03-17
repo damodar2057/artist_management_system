@@ -5,7 +5,7 @@ import { BadRequestException } from "src/common/exceptions/badRequest.exception"
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
 import { IMusicEntity } from "src/common/interfaces/music.interface";
 import { IPaginationOptions } from "src/common/interfaces/pagination-options.interface";
-import { CreateMusicDto } from "src/dtos/music.dto";
+import { CreateMusicDto, UpdateMusicDto } from "src/dtos/music.dto";
 import { ArtistModel } from "src/models/artistModel";
 import { MusicModel } from "src/models/musicModel";
 
@@ -46,6 +46,14 @@ export class MusicService {
         }
     }
 
+    public async fetchAllMusicsByArtistId(options: IPaginationOptions, artist_id): Promise<{ data: IMusicEntity[], total: number}> {
+        try {
+            return await this.repository.findAllMusicsByArtistId(options, artist_id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     public async createMusic(dto: CreateMusicDto): Promise<IMusicEntity | null> {
         try {
 
@@ -61,12 +69,18 @@ export class MusicService {
         }
     }
 
-    public async updateMusic(musicId: string, dto: any): Promise<IMusicEntity | null> {
+    public async updateMusic(musicId: string, dto: UpdateMusicDto): Promise<IMusicEntity | null> {
         try {
             console.log('Music id i got is ', musicId)
             const music = await this.repository.findOne(musicId);
             if (!music) {
                 throw new NotFoundException(`Music with id ${musicId} not found!`);
+            }
+
+            // if artist id is also tried to updated then validate it
+            const artist = await this.artistRepository.findById(dto.artist_id);
+            if(!artist){
+                throw new BadRequestException(`Artist with id:${dto.artist_id} not found!!`)
             }
 
             const updatedMusic = await this.repository.update(musicId, dto);

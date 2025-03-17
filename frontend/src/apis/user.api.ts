@@ -1,3 +1,4 @@
+import { ICreateUser, IUpdateUser } from "common/interfaces/user.interface";
 import { IResponse } from "../common/interfaces/response.interface";
 import appConfig from "../config/app.config";
 
@@ -9,7 +10,7 @@ const userApiManager = {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${token}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 
@@ -25,7 +26,7 @@ const userApiManager = {
     },
 
     // GET all users
-    fetchUsersData: async () => {
+    fetchUsersData: async (page: number) => {
         try {
             const accessToken = localStorage.getItem("accessToken");
 
@@ -33,11 +34,11 @@ const userApiManager = {
                 throw new Error("No access token found. Please log in again.");
             }
 
-            const response : Response= await fetch(`${appConfig.serverUrl}user`, {
+            const response : Response= await fetch(`${appConfig.serverUrl}user?page=${page}&pageSize=3`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    // "Authorization": `Bearer ${accessToken}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 
@@ -53,13 +54,13 @@ const userApiManager = {
     },
 
     // POST create user
-    createUser: async (userData: object) => {
+    createUser: async (userData: ICreateUser) => {
         try {
             const response = await fetch(`${appConfig.serverUrl}user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${token}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 },
                 body: JSON.stringify(userData)
             });
@@ -76,13 +77,13 @@ const userApiManager = {
     },
 
     // PUT update user
-    updateUser: async (id: string, userData: object) => {
+    updateUser: async (id: string, userData: IUpdateUser) => {
         try {
             const response = await fetch(`${appConfig.serverUrl}user/${id}`, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${token}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 },
                 body: JSON.stringify(userData)
             });
@@ -115,7 +116,7 @@ const userApiManager = {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${token}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 

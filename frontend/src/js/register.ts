@@ -1,6 +1,9 @@
 // 
 
-import userApiManager from "../apis/user.api";
+import toastComponent from "../components/toast/toastComponent";
+import { Gender } from "../common/constants/gender.enum";
+import { UserRoles } from "../common/constants/user-role.enum";
+import authApiManager from "../apis/auth.api";
 
 window.onload = () => {
     let accessToken = localStorage.getItem('accessToken');
@@ -60,8 +63,8 @@ registerForm.addEventListener('submit', async (ev) => {
         dob: (registerForm.querySelector("#dob") as HTMLInputElement).value,
         first_name: (registerForm.querySelector("#first-name") as HTMLInputElement).value.trim(),
         last_name: (registerForm.querySelector("#last-name") as HTMLInputElement).value.trim(),
-        gender: (registerForm.querySelector("#gender") as HTMLInputElement).value,
-        role: (registerForm.querySelector("#role") as HTMLInputElement).value.trim(),
+        gender: (registerForm.querySelector("#gender") as HTMLInputElement).value as Gender,
+        role: (registerForm.querySelector("#role") as HTMLInputElement).value.trim() as UserRoles,
         address: (registerForm.querySelector("#address") as HTMLInputElement).value.trim(),
     };
 
@@ -80,9 +83,9 @@ registerForm.addEventListener('submit', async (ev) => {
     if (hasError) return;
 
     try {
-        const res: any = await userApiManager.createUser(formData);
+        const res: any = await authApiManager.register(formData);
         console.log(res);
-        alert(res.message);
+        toastComponent(res.message,'success');
         window.location.href = '/src/pages/login.html'
     } catch (error) {
         console.error(error);

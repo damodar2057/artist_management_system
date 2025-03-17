@@ -3,6 +3,7 @@
 import { IErrorMessage } from "common/interfaces/error-response.interface";
 import { IResponse } from "../common/interfaces/response.interface";
 import appConfig from "../config/app.config";
+import { IUpdateMusic } from "common/interfaces/music.interface";
 
 
 const musicApiManager = {
@@ -13,6 +14,8 @@ const musicApiManager = {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+
                 }
             });
 
@@ -25,14 +28,37 @@ const musicApiManager = {
             throw error
         }
     },
-
-    // GET all music
-    fetchMusic: async () => {
+    // GET musics by artist id
+    getMusicsByArtistId: async (artist_id: string): Promise<IResponse<any> | null> => {
         try {
-            const response = await fetch(`${appConfig.serverUrl}music`, {
+            const response = await fetch(`${appConfig.serverUrl}music/${artist_id}/songs`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch musics by artist id. Status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            throw error
+        }
+    },
+
+    // GET all music
+    fetchMusic: async (page: number = 1) => {
+        try {
+            const response = await fetch(`${appConfig.serverUrl}music?page=${page}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+
                 }
             });
 
@@ -53,6 +79,8 @@ const musicApiManager = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+
                 },
                 body: JSON.stringify(musicData)
             });
@@ -69,12 +97,14 @@ const musicApiManager = {
     },
 
     // PUT update music
-    updateMusic: async (id: string, musicData: object) => {
+    updateMusic: async (id: string, musicData: IUpdateMusic) => {
         try {
             const response = await fetch(`${appConfig.serverUrl}music/${id}`, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+
                 },
                 body: JSON.stringify(musicData)
             });
@@ -97,6 +127,8 @@ const musicApiManager = {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+
                 }
             });
 

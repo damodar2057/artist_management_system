@@ -15,6 +15,18 @@ export const musicQueries = {
             OFFSET ${(page - 1) * pageSize};
         `;
     },
+    findAllMusicByArtistId: (options: IPaginationOptions, music_id: string) => {
+        const { page = 1, pageSize = 10, sortBy = 'created_at', sortOrder = 'ASC' } = options;
+
+        return `
+            SELECT * 
+            FROM ${DBTables.MUSIC}
+            ORDER BY ${sortBy} ${sortOrder}  
+            LIMIT ${pageSize}  
+            OFFSET ${(page - 1) * pageSize}
+            WHERE music_id=${music_id};
+        `;
+    },
     findOne: `SELECT * FROM ${DBTables.MUSIC} WHERE id = $1`,
     create: `INSERT INTO ${DBTables.MUSIC}(title, album_name, genre, artist_id) 
              VALUES ($1, $2, $3, $4) 

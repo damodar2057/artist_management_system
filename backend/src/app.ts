@@ -39,7 +39,7 @@ async function startServer() {
     
     // Rate limiting
     const limiter = rateLimit({
-      windowMs: 15 * 60 * 1000, // 15 minutes window
+      windowMs: 115 * 60 * 1000, // 15 minutes window
       max: 100, // 100 requests per windowMs per IP
       message: 'Too many requests, please try again later.',
     });

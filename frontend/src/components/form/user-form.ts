@@ -1,10 +1,10 @@
 const CreateUserForm = () => {
     return `
-        <div class="create-user-container">
+        <div class="create-user-container" id="">
             <div class="text">
                 Create User
             </div>
-            <form action="#">
+            <form action="#" id="create-user-form-id">
 
                 <!-- First Name Field -->
                 <div class="form-row">
@@ -59,8 +59,9 @@ const CreateUserForm = () => {
                     <div class="input-data">
                         <label for="userRole">Role</label>
                         <select id="userRole" required>
-                            <option value="admin">Admin</option>
-                            <option value="user">User</option>
+                            <option value="super_admin">Super Admin</option>
+                            <option value="artist">Artist</option>
+                            <option value="artist_manager">Artist Manager</option>
                         </select>
                     </div>
                 </div>

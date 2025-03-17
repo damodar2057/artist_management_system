@@ -1,6 +1,7 @@
 //
 
 
+import { ICreateArtist, IUpdateArtist } from "../common/interfaces/artist.interface";
 import { IResponse } from "../common/interfaces/response.interface";
 import appConfig from "../config/app.config";
 
@@ -12,6 +13,7 @@ const artistApiManager = {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 
@@ -26,12 +28,14 @@ const artistApiManager = {
     },
 
     // GET all artists
-    fetchArtists: async () => {
+    fetchArtists: async (page?: number) => {
         try {
             const response = await fetch(`${appConfig.serverUrl}artist`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+
                 }
             });
 
@@ -46,13 +50,61 @@ const artistApiManager = {
         }
     },
 
+    fetchExportArtistData: async () => {
+        try {
+            const response = await fetch(`${appConfig.serverUrl}artist?page=1&pageSize=1000000`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch artists. Status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error(`Error fetching export artists data: ${error}`)
+            throw error
+        }
+    },
+
     // POST create artist
-    createArtist: async (artistData: object) => {
+    createArtist: async (artistData: ICreateArtist) => {
         try {
             const response = await fetch(`${appConfig.serverUrl}artist`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                },
+                body: JSON.stringify(artistData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to create artist. Status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error(`Error creating artist: ${error}`);
+            throw error
+        }
+    },
+
+    // POST create artist
+    postImportArtists: async (artistData: any) => {
+        try {
+            console.log(artistData)
+            const response = await fetch(`${appConfig.serverUrl}artist/import`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+                    
                 },
                 body: JSON.stringify(artistData)
             });
@@ -69,12 +121,13 @@ const artistApiManager = {
     },
 
     // PUT update artist
-    updateArtist: async (id: string, artistData: object) => {
+    updateArtist: async (id: string, artistData: IUpdateArtist) => {
         try {
             const response = await fetch(`${appConfig.serverUrl}artist/${id}`, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 },
                 body: JSON.stringify(artistData)
             });
@@ -97,6 +150,7 @@ const artistApiManager = {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
 

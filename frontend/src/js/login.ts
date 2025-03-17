@@ -1,5 +1,6 @@
+import toastComponent from "../components/toast/toastComponent";
 import authApiManager from "../apis/auth.api";
-import { ILoginResponse } from "common/interfaces/response.interface";
+import { ILoginResponse } from "../common/interfaces/response.interface";
 
 window.onload = () => {
     let accessToken = localStorage.getItem("accessToken");
@@ -59,9 +60,10 @@ document.getElementById("submitButton")?.addEventListener("click", async (ev) =>
 
         if (res.data?.accessToken) {
             localStorage.setItem("accessToken", res.data.accessToken);
+            toastComponent(res.message,'success');
             window.location.href = "/src/pages/dashboard.html";
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error("Login failed:", error);
         errorElements.username.innerHTML = "*Invalid credentials";
         errorElements.username.style.display = "block";

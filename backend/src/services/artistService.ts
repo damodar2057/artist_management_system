@@ -50,6 +50,13 @@ export class ArtistService {
             throw error;
         }
     }
+    public async insertMany(dto: CreateArtistDto[]): Promise<any> {
+        try {
+            return  await this.repository.bulkInsertArtists(dto);
+        } catch (error) {
+            throw error;
+        }
+    }
 
     public async updateArtist(artistId: string, dto: any): Promise<IArtistEntity | null> {
         try {

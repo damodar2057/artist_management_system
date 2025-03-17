@@ -14,3 +14,21 @@ export interface IArtist {
     updated_at?: Date;
 
 }
+
+export interface ICreateArtist {
+    name: string;
+    dob: Date;
+    gender: Gender;
+    address: string;
+    first_release_year: number;
+    no_of_albums_released: number;
+}
+
+export interface IUpdateArtist {
+    name?: string;
+    dob?: Date;
+    gender?: Gender;
+    address?: string;
+    first_release_year?: number;
+    no_of_albums_released?: number;
+}

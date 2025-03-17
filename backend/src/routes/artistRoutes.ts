@@ -2,7 +2,9 @@
 
 
 import * as express from 'express'
+import { validateArtist } from 'src/common/validator/artist.validator';
 import { ArtistController } from 'src/controllers/artistController';
+import validatorMiddleware from 'src/middlewares/validation.middleware';
 const artistController = ArtistController.getInstance()
 
 const router: express.Router = express.Router();
@@ -25,9 +27,18 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', validatorMiddleware(validateArtist), async (req, res, next) => {
     try {
         const newArtist = await artistController.createArtist(req);
+        res.json(newArtist);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.post('/import', async (req, res, next) => {
+    try {
+        const newArtist = await artistController.createManyArtist(req);
         res.json(newArtist);
     } catch (error) {
         next(error);

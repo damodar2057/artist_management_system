@@ -3,10 +3,12 @@
 import { Request } from "express";
 import { Permissions } from "src/common/constants/permissions.enum";
 import { PermissionGuard } from "src/common/decorators/permission-guard.decorator";
+import { BadRequestException } from "src/common/exceptions/badRequest.exception";
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
 import { IArtistEntity } from "src/common/interfaces/artist.interface";
 import { IPaginatedResult } from "src/common/interfaces/paginated-result.interface";
 import { ArtistService } from "src/services/artistService";
+import { isValidArtist } from "src/utils/artist.validation";
 
 export class ArtistController {
     private static instance: ArtistController;
@@ -41,6 +43,7 @@ export class ArtistController {
         }
     }
 
+
     @PermissionGuard(Permissions.READ_ARTIST_ONE)
     async getArtistById(req: Request): Promise<IArtistEntity> {
         try {
@@ -58,6 +61,28 @@ export class ArtistController {
     async createArtist(req: Request): Promise<IArtistEntity> {
         try {
             return await this.artistService.createArtist(req.body);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @PermissionGuard(Permissions.CREATE_ARTIST)
+    async createManyArtist(req: Request): Promise<IArtistEntity> {
+        const  artists  = req.body;
+        console.log(artists);
+        if(!artists || !Array.isArray(artists)){
+            throw new BadRequestException('Invalid data format!!')
+        }
+
+        console.log(req.body)
+
+        // const validArtists = artists.filter(isValidArtist);
+
+        // if(validArtists.length === 0){
+        //     throw new BadRequestException(`No valid artists found!!`)
+        // }
+        try {
+            return await this.artistService.insertMany(req.body);
         } catch (error) {
             throw error;
         }

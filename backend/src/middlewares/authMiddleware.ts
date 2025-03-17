@@ -16,9 +16,10 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
         if (!authorization || !authorization.startsWith('Bearer ')) {
             throw new BadRequestException("Authorization token missing or malformed");
         }
-
         const accessToken = authorization.split(' ')[1];
-
+        if (!accessToken) {  
+            return;  
+        }
         // Validate JWT Token
         let payload: IJwtPayload;
         try {

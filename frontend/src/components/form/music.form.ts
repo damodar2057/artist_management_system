@@ -1,8 +1,14 @@
 //
 
+import { UserRoles } from "common/constants/user-role.enum";
+import artistApiManager from "../../apis/artist.api";
+import { IArtist } from "../../common/interfaces/artist.interface";
 
 
-const CreateMusicForm = () => {
+
+const CreateMusicForm = async (userRole: UserRoles) => {
+    // const currentUser = (await )// todo
+    const artists: IArtist[] = (await artistApiManager.fetchArtists()).data as IArtist[]
     return `
         <div class="create-music-container">
             <div class="text">
@@ -21,7 +27,7 @@ const CreateMusicForm = () => {
                 <div class="form-row">
                     <div class="input-data">
                     <label for="albumName">Album Name</label>
-                        <input type="date" id="albumName" required>
+                        <input type="text" id="albumName" required>
                     </div>
                 </div>
 
@@ -30,11 +36,11 @@ const CreateMusicForm = () => {
                     <div class="input-data">
                     <label for="musicGenre">Genre</label>
                         <select id="musicGenre" required>
-                            <option value="pop">Pop</option>
+                            <option value="mb">MB</option>
+                            <option value="country">Country</option>
+                            <option value="classic">Classic</option>
                             <option value="rock">Rock</option>
-                            <option value="hip-hop">Hip-Hop</option>
                             <option value="jazz">Jazz</option>
-                            <option value="classical">Classical</option>
                         </select>
                     </div>
                 </div>
@@ -43,7 +49,11 @@ const CreateMusicForm = () => {
                 <div class="form-row">
                     <div class="input-data">
                     <label for="artistID">Artist</label>
-                        <input type="text" id="artistID" required>
+                        <select  type="text" id="artistID" required>
+                        ${artists.map((artist) => {
+                return `<option value="${artist.id}">${artist.name}</option>`;
+                }).join('')}
+                        </select>
                     </div>
                 </div>
 

@@ -130,10 +130,9 @@
     grid-template-columns: 1fr 1fr;  /* Two columns for fields */
 }
 
-
-
 .update-btn, 
-.delete-btn {
+.delete-btn, 
+.list-artist-songs-btn {
     background-color: red;
     color: white;
     border: none;
@@ -145,27 +144,31 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Hover effect */
-.update-btn:hover, 
-.delete-btn:hover {
-    background-color: darkred;
-    transform: scale(1.05);
-}
-
 /* Active (click) effect */
 .update-btn:active, 
-.delete-btn:active {
+.delete-btn:active,
+.list-artist-songs-btn:active {
     transform: scale(0.95);
 }
 
-.update-btn {
+/* Override default colors */
+.update-btn, 
+.list-artist-songs-btn {
     background-color: #007bff; 
 }
 
-.update-btn:hover {
+/* Hover Effects */
+.update-btn:hover,
+.list-artist-songs-btn:hover {
+    transform: scale(1.05);
     background-color: #0056b3;
 }
 
 .delete-btn {
     background-color: red;
+}
+
+.delete-btn:hover {
+    transform: scale(1.05);
+    background-color: darkred;
 }

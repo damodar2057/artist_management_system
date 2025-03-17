@@ -34,6 +34,15 @@ export class MusicModel {
         }
     }
 
+    async findAllMusicsByArtistId(options: IPaginationOptions, music_id: string): Promise<{ data: IMusicEntity[], total: number }> {
+        try {
+            const data = (await this.dbConnection.query(musicQueries.findAllMusicByArtistId(options, music_id)))
+            return { data: data.rows, total:  (await this.dbConnection.query(`SELECT * FROM ${DBTables.MUSIC} WHERE music_id=${music_id}`)).rowCount }
+        } catch (error) {
+            throw error
+        }
+    }
+
     async findOne(id: string): Promise<IMusicEntity> {
         try {
             return (await this.dbConnection.query(musicQueries.findOne, [id])).rows[0]

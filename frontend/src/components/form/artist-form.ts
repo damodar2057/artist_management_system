@@ -28,9 +28,9 @@ const CreateArtistForm = () => {
                     <div class="input-data">
                     <label for="artistGender">Gender</label>
                         <select id="artistGender" required>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
+                            <option value="m">Male</option>
+                            <option value="f">Female</option>
+                            <option value="o">Other</option>
                         </select>
                     </div>
                 </div>

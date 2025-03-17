@@ -38,7 +38,18 @@ export const tableConstants = {
         NO_OF_ALBUMS_RELEASED: "Albums Released",
         CREATED_AT: "Created At",
         UPDATED_AT: "Updated At",
+        VIEW_SONGS:'',
         DELETE: '',
         UPDATE: ''
-    }
+    },
+    discoverSongsTableHeaders: {
+        ID: "Music ID",
+        TITLE: "Title",
+        ALBUM_NAME: "Album Name",
+        GENRE: "Genre",
+        ARTIST_ID: "Artist ID",
+        CREATED_AT: "Created At",
+        UPDATED_AT: "Updated At",
+    },
+
 };
