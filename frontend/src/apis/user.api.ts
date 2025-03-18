@@ -1,6 +1,7 @@
 import { ICreateUser, IUpdateUser } from "common/interfaces/user.interface";
 import { IResponse } from "../common/interfaces/response.interface";
 import appConfig from "../config/app.config";
+import { IQueryOptions } from "../common/interfaces/query-options";
 
 const userApiManager = {
     // GET user by ID
@@ -26,7 +27,7 @@ const userApiManager = {
     },
 
     // GET all users
-    fetchUsersData: async (page: number) => {
+    fetchUsersData: async (query: IQueryOptions) => {
         try {
             const accessToken = localStorage.getItem("accessToken");
 
@@ -34,7 +35,7 @@ const userApiManager = {
                 throw new Error("No access token found. Please log in again.");
             }
 
-            const response : Response= await fetch(`${appConfig.serverUrl}user?page=${page}&pageSize=3`, {
+            const response : Response= await fetch(`${appConfig.serverUrl}user?page=${query?.page}&pageSize=${query?.pageSize}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -103,15 +104,6 @@ const userApiManager = {
     deleteUser: async (id: string) => {
         try {
 
-            console.log(id)
-            console.log(id)
-            console.log(id)
-            console.log(id)
-            console.log(id)
-            console.log(id)
-            console.log(id)
-            console.log(id)
-            console.log(id)
             const response = await fetch(`${appConfig.serverUrl}user/${id}`, {
                 method: 'DELETE',
                 headers: {

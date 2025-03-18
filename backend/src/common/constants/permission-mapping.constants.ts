@@ -28,7 +28,9 @@ export const PermissionMapping = {
         Permissions.CREATE_ARTIST,  // Can create new artist records
         Permissions.UPDATE_ARTIST,  // Can update existing artist records
         Permissions.DELETE_ARTIST,  // Can delete artist records
-        Permissions.READ_MUSIC,  // Can fetch songs by artist id
+        Permissions.READ_MUSIC_ALL,  // Can list songs
+        Permissions.READ_MUSIC_ONE,  // Can list songs
+        
     ],
     [UserRoles.ARTIST]: [
         Permissions.READ_MUSIC_ALL,  // Can list songs

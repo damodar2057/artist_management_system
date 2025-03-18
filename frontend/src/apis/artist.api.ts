@@ -1,6 +1,7 @@
 //
 
 
+import { IQueryOptions } from "common/interfaces/query-options";
 import { ICreateArtist, IUpdateArtist } from "../common/interfaces/artist.interface";
 import { IResponse } from "../common/interfaces/response.interface";
 import appConfig from "../config/app.config";
@@ -28,9 +29,9 @@ const artistApiManager = {
     },
 
     // GET all artists
-    fetchArtists: async (page?: number) => {
+    fetchArtists: async (query: IQueryOptions) => {
         try {
-            const response = await fetch(`${appConfig.serverUrl}artist`, {
+            const response = await fetch(`${appConfig.serverUrl}artist?page=${query?.page || 1}&pageSize=${query?.pageSize || 5}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

@@ -26,11 +26,20 @@ function loadUpdateUserDetailsComponent(user: IUser) {
                 </div>
                 <div class="form-group">
                     <label for="dob">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" value="${new Date(user.dob).toISOString().split('T')[0]}"  />
-                </div>
+                <input 
+                type="date" 
+                id="dob" 
+                name="dob" 
+                value="${new Date(user.dob).toISOString().split('T')[0]}"  
+                max="${new Date().toISOString().split('T')[0]}" 
+                />                </div>
                 <div class="form-group">
                     <label for="role">Role</label>
-                    <input type="text" id="role" name="role" value="${user.role}"  />
+                              <select id="role" name="role" >
+                        <option value="m" ${user.role === 'super_admin' ? 'selected' : ''}>Super Admin</option>
+                        <option value="f" ${user.role === 'artist' ? 'selected' : ''}>Artist</option>
+                        <option value="o" ${user.role === 'artist_manager' ? 'selected' : ''}>Artist Manager</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="gender">Gender</label>

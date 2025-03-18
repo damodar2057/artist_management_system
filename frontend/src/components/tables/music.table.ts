@@ -3,6 +3,7 @@ import { IMusic } from '../../common/interfaces/music.interface';
 import { Genre } from 'common/constants/genre.enum';
 
 function getMusicsTableHtml(content: IMusic[]) {
+    console.log(content.length)
     console.log('Rendering music table');
     return `
         <table border="1" id="music-table">

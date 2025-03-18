@@ -11,6 +11,9 @@ export default defineConfig({
                 dashboard: resolve(__dirname, 'src/pages/dashboard.html'),
             }
 
-        }
+        },
+    },
+    server: {
+        allowedHosts: ['test.supertruck.ai']
     }
 })

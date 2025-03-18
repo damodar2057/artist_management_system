@@ -35,6 +35,7 @@ import { exportArtistDataToCSV } from "./artist";
 import { parseCSVToJson } from "../utils/parse-csv-to-json"
 import loadDiscoverSongsTable from "../components/tables/discover-songs";
 import loadViewSongsByArtistIdTable from "../components/tables/view-songs-by-artistId";
+import { IQueryOptions } from "common/interfaces/query-options";
 
 
 // DOM Elements
@@ -85,7 +86,7 @@ window.onload = async () => {
             break
         case UserRoles.ARTIST_MANAGER:
             artistLiElement.style.display = 'block'
-            musicLiElement.style.display = 'block'
+            // musicLiElement.style.display = 'block'
 
             break
         case UserRoles.ARTIST:
@@ -112,15 +113,17 @@ recommendedSongsLink.addEventListener("click", async (ev) => {
 });
 
 
-async function fetchRecommendedSongs(page: number = 1) {
+async function fetchRecommendedSongs(page: number = 1, pageSize: number = 5) {
     try {
-        const res: IResponse<any> = await musicApiManager.fetchMusic(page); // Fetch paginated data
+        const res: IResponse<any> = await musicApiManager.fetchMusic({page, pageSize}); // Fetch paginated data
         if (res.data && res.data.length > 0) {
 
             updateContent(loadDiscoverSongsTable(res.data))
 
             renderPagination("pagination-container", res.pagination as IPaginationResponse, fetchRecommendedSongs);
 
+        }else {
+            contentContainer.innerHTML = 'No records found'
         }
     } catch (error) {
         console.error("Error fetching data:", error);
@@ -130,12 +133,12 @@ async function fetchRecommendedSongs(page: number = 1) {
 usersLink.addEventListener("click", async () => {
         contentContainer.innerHTML = getLoaderHtml();
     (document.querySelector(".main-content .createRecordBtnContainer") as HTMLDivElement).style.display = 'flex'
-    await fetchAndRenderUsers(1); // Start from page 1
+    await fetchAndRenderUsers(1,5); // Start from page 1
     setActiveLink(usersLink);
     setBreadCrumb(usersLink);
 });
-async function fetchAndRenderUsers(page: number = 1) {
-    const res: IResponse<any> = await userApiManager.fetchUsersData(page); // Fetch paginated data
+async function fetchAndRenderUsers(page: number = 1, pageSize: number = 5) {
+    const res: IResponse<any> = await userApiManager.fetchUsersData({page, pageSize}); // Fetch paginated data
 
     if (res.data && res.data.length > 0) {
         updateContent(getUsersTableHtml(res.data));
@@ -144,6 +147,8 @@ async function fetchAndRenderUsers(page: number = 1) {
         attachUpdateBtnListener();
         attachDeleteBtnListener();
         renderPagination("pagination-container", res.pagination as IPaginationResponse, fetchAndRenderUsers);
+    }else {
+        contentContainer.innerHTML = 'No records found'
     }
 }
 
@@ -204,13 +209,13 @@ async function attachImportArtistDataListener() {
 artistsLink.addEventListener("click", async () => {
     contentContainer.innerHTML = getLoaderHtml();
     (document.querySelector(".main-content .createRecordBtnContainer") as HTMLDivElement).style.display = 'flex'
-    await fetchAndRenderArtists(1); // Start from page 1
+    await fetchAndRenderArtists(1,5); // Start from page 1
     setActiveLink(artistsLink);
     setBreadCrumb(artistsLink);
 });
-async function fetchAndRenderArtists(page: number) {
+async function fetchAndRenderArtists(page: number = 1, pageSize: number = 5) {
     contentContainer.innerHTML = getLoaderHtml();
-    const res: IResponse<any> = await artistApiManager.fetchArtists(page); // Fetch paginated data
+    const res: IResponse<any> = await artistApiManager.fetchArtists({page,pageSize}); // Fetch paginated data
 
     if (res.data && res.data.length > 0) {
         attachCreateRecordListener()
@@ -222,6 +227,8 @@ async function fetchAndRenderArtists(page: number) {
         await attachImportArtistDataListener()
         attachViewArtistSongsListener()
         renderPagination("pagination-container", res.pagination as IPaginationResponse, fetchAndRenderArtists);
+    } else {
+        contentContainer.innerHTML = 'No records found'
     }
 }
 
@@ -234,9 +241,9 @@ musicLink.addEventListener("click", async () => {
     setBreadCrumb(musicLink);
 });
 
-async function fetchAndRenderMusic(page: number) {
+async function fetchAndRenderMusic(page: number = 1, pageSize: number = 5) {
     contentContainer.innerHTML = getLoaderHtml();
-    const res: IResponse<any> = await musicApiManager.fetchMusic(page); // Fetch music data
+    const res: IResponse<any> = await musicApiManager.fetchMusic({page, pageSize}); // Fetch music data
 
     if (res.data && res.data.length > 0) {
         attachCreateRecordListener();
@@ -246,6 +253,8 @@ async function fetchAndRenderMusic(page: number) {
         attachDeleteBtnListener();
         renderPagination("pagination-container", res.pagination as IPaginationResponse, fetchAndRenderMusic);
 
+    }else {
+        contentContainer.innerHTML = 'No records found'
     }
 }
 

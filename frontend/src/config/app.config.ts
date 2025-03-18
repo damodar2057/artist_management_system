@@ -2,7 +2,7 @@
 
 
  const appConfig =  {
-    serverUrl: 'http://localhost:3000/api/v1/',
+    serverUrl: 'http://test.supertruck.ai/backend/api/v1/',
 
 }
 

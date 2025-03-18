@@ -20,10 +20,6 @@ function attachArtistFormListener() {
         const releaseYearInput = artistCreateForm.querySelector("#firstReleaseYear") as HTMLInputElement;
         const albumsInput = artistCreateForm.querySelector("#noOfAlbums") as HTMLInputElement;
 
-        console.log(genderInput.value)
-        console.log(genderInput.value)
-        console.log(genderInput.value)
-        console.log(genderInput.value)
 
         // Clear previous errors
         clearErrors(artistCreateForm);

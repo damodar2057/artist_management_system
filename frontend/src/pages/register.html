@@ -55,8 +55,14 @@
         <!-- Date of Birth -->
         <div class="form-group">
           <label for="dob">Date of Birth:</label>
-          <input type="date" id="dob" name="dob"  />
-        </div>
+          <input 
+          type="date" 
+          id="dob" 
+          name="dob" 
+          value="${new Date(user.dob).toISOString().split('T')[0]}"  
+          max="${new Date().toISOString().split('T')[0]}" 
+        />
+              </div>
         
         <!-- Gender -->
         <div class="form-group">

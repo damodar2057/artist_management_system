@@ -1,9 +1,9 @@
 //
 
-import { IErrorMessage } from "common/interfaces/error-response.interface";
 import { IResponse } from "../common/interfaces/response.interface";
 import appConfig from "../config/app.config";
 import { IUpdateMusic } from "common/interfaces/music.interface";
+import { IQueryOptions } from "common/interfaces/query-options";
 
 
 const musicApiManager = {
@@ -51,9 +51,9 @@ const musicApiManager = {
     },
 
     // GET all music
-    fetchMusic: async (page: number = 1) => {
+    fetchMusic: async (query: IQueryOptions) => {
         try {
-            const response = await fetch(`${appConfig.serverUrl}music?page=${page}`, {
+            const response = await fetch(`${appConfig.serverUrl}music?page=${query?.page}&pageSize=${query?.pageSize}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

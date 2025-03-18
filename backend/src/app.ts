@@ -31,7 +31,8 @@ async function startServer() {
   try {
     
     const app = express();
-    
+    // Trust proxy headers (important when behind a reverse proxy)
+    app.set('trust proxy', 1); // 1 means trusting the first proxy
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(helmet());
@@ -40,7 +41,7 @@ async function startServer() {
     // Rate limiting
     const limiter = rateLimit({
       windowMs: 115 * 60 * 1000, // 15 minutes window
-      max: 100, // 100 requests per windowMs per IP
+      max: 10000, // 100 requests per windowMs per IP
       message: 'Too many requests, please try again later.',
     });
     app.use(limiter);

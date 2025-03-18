@@ -9,9 +9,9 @@ function validateMusic(data: Partial<IMusicEntity>): string[] {
     if (!data.title || typeof data.title !== "string" || data.title.length < 3) {
         errors.push("Title must be at least 3 characters long.");
     }
+    if (!data.album_name || typeof data.album_name !== "string") {
 
-    if (!data.album_name || isNaN(new Date(data.album_name).getTime())) {
-        errors.push("Album name must be a valid date.");
+        errors.push("Album name must be a string.");
     }
 
     if (!data.genre || !Object.values(Genre).includes(data.genre)) {

@@ -8,7 +8,7 @@ import { IArtist } from "../../common/interfaces/artist.interface";
 
 const CreateMusicForm = async (userRole: UserRoles) => {
     // const currentUser = (await )// todo
-    const artists: IArtist[] = (await artistApiManager.fetchArtists()).data as IArtist[]
+    const artists: IArtist[] = (await artistApiManager.fetchArtists({page:1, pageSize: 5})).data as IArtist[]
     return `
         <div class="create-music-container">
             <div class="text">

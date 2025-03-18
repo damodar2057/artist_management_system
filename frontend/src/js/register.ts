@@ -87,7 +87,8 @@ registerForm.addEventListener('submit', async (ev) => {
         console.log(res);
         toastComponent(res.message,'success');
         window.location.href = '/src/pages/login.html'
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
+        toastComponent(error.message, 'error')
     }
 });
