@@ -17,16 +17,17 @@ export const musicQueries = {
     },
     findAllMusicByArtistId: (options: IPaginationOptions, artist_id: string) => {
         const { page = 1, pageSize = 10, sortBy = 'created_at', sortOrder = 'ASC' } = options;
-
+    
         return `
             SELECT * 
             FROM ${DBTables.MUSIC}
+            WHERE artist_id = '${artist_id}'  -- WHERE comes before ORDER BY
             ORDER BY ${sortBy} ${sortOrder}  
             LIMIT ${pageSize}  
-            OFFSET ${(page - 1) * pageSize}
-            WHERE artist_id=${artist_id};
+            OFFSET ${(page - 1) * pageSize};
         `;
     },
+    
     findOne: `SELECT * FROM ${DBTables.MUSIC} WHERE id = $1`,
     create: `INSERT INTO ${DBTables.MUSIC}(title, album_name, genre, artist_id) 
              VALUES ($1, $2, $3, $4) 
