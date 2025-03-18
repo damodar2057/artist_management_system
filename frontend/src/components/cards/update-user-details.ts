@@ -16,10 +16,7 @@ function loadUpdateUserDetailsComponent(user: IUser) {
                     <label for="last-name">Last Name</label>
                     <input type="text" id="last-name" name="last_name" value="${user.last_name}"  />
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="${user.email}"  />
-                </div>
+
                 <div class="form-group">
                     <label for="phone">Phone</label>
                     <input type="text" id="phone" name="phone" value="${user.phone}"  />
@@ -36,9 +33,9 @@ function loadUpdateUserDetailsComponent(user: IUser) {
                 <div class="form-group">
                     <label for="role">Role</label>
                               <select id="role" name="role" >
-                        <option value="m" ${user.role === 'super_admin' ? 'selected' : ''}>Super Admin</option>
-                        <option value="f" ${user.role === 'artist' ? 'selected' : ''}>Artist</option>
-                        <option value="o" ${user.role === 'artist_manager' ? 'selected' : ''}>Artist Manager</option>
+                        <option value="super_admin" ${user.role === 'super_admin' ? 'selected' : ''}>Super Admin</option>
+                        <option value="artist" ${user.role === 'artist' ? 'selected' : ''}>Artist</option>
+                        <option value="artist_manager" ${user.role === 'artist_manager' ? 'selected' : ''}>Artist Manager</option>
                     </select>
                 </div>
                 <div class="form-group">

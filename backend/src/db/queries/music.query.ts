@@ -15,7 +15,7 @@ export const musicQueries = {
             OFFSET ${(page - 1) * pageSize};
         `;
     },
-    findAllMusicByArtistId: (options: IPaginationOptions, music_id: string) => {
+    findAllMusicByArtistId: (options: IPaginationOptions, artist_id: string) => {
         const { page = 1, pageSize = 10, sortBy = 'created_at', sortOrder = 'ASC' } = options;
 
         return `
@@ -24,7 +24,7 @@ export const musicQueries = {
             ORDER BY ${sortBy} ${sortOrder}  
             LIMIT ${pageSize}  
             OFFSET ${(page - 1) * pageSize}
-            WHERE music_id=${music_id};
+            WHERE artist_id=${artist_id};
         `;
     },
     findOne: `SELECT * FROM ${DBTables.MUSIC} WHERE id = $1`,

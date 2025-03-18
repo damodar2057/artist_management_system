@@ -18,7 +18,7 @@ router.get('/', async (req, res, next) => {
 });
 router.get('/:artist_id/songs', async (req, res, next) => {
     try {
-        const musics = await musicController.getMusics(req);
+        const musics = await musicController.getMusicsByArtistId(req);
         res.json(musics);
     } catch (error) {
         next(error);

@@ -7,6 +7,7 @@ import { IUserEntity } from "src/common/interfaces/user.interface";
 import db from 'src/db'
 import { usersQueries } from "src/db/queries/user.query";
 import { CreateUserDto, UpdateUserDto } from "src/dtos/user.dto";
+import { hashPassword } from "src/utils/hash-password.util";
 
 interface FindOptionsWhere<T> {
 
@@ -60,11 +61,11 @@ export class UserModel {
     }
     async update(userId: string, dto: UpdateUserDto) {
         try {
+            console.log(dto)
+         
              return (await this.dbConnection.query(usersQueries.update, [
                 dto.first_name,
                 dto.last_name,
-                dto.email,
-                dto.password,
                 dto.phone,
                 dto.dob,
                 dto.gender,

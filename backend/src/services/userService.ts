@@ -6,6 +6,7 @@ import { IPaginationOptions } from "src/common/interfaces/pagination-options.int
 import { IUserEntity } from "src/common/interfaces/user.interface";
 import { CreateUserDto, UpdateUserDto } from "src/dtos/user.dto";
 import { UserModel } from "src/models/userModels";
+import { hashPassword } from "src/utils/hash-password.util";
 
 export class UserService {
     private static instance: UserService;
@@ -44,15 +45,14 @@ export class UserService {
 
     public async createUser(dto: CreateUserDto): Promise<IUserEntity | null> {
         try {
-            console.log(dto)
-            console.log(dto)
-            console.log(dto)
-            console.log(dto)
             const existingUser = await this.repository.findByEmail(dto.email);
             if(existingUser){
                 throw new BadRequestException(`User with email ${dto.email} already exists!!`)
             }
-            const user = await this.repository.create(dto);
+            const user = await this.repository.create( {
+                ...dto,
+                password: await hashPassword(dto?.password)
+            });
             return user;
         } catch (error) {
             throw error;
@@ -65,8 +65,9 @@ export class UserService {
             if (!user) {
                 throw new NotFoundException(`User with id ${userId} not found!`);
             }
-
-            const updatedUser = await this.repository.update(userId, dto);
+            const updatedUser = await this.repository.update(userId, {
+                ...dto,
+            });
             return updatedUser;
         } catch (error) {
             throw error;

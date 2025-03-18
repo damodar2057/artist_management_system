@@ -499,7 +499,6 @@ function updateUserListener(userId: string) {
         const formData = {
             firstName: (form.querySelector("#first-name") as HTMLInputElement).value,
             lastName: (form.querySelector("#last-name") as HTMLInputElement).value,
-            email: (form.querySelector("#email") as HTMLInputElement).value,
             phone: (form.querySelector("#phone") as HTMLInputElement).value,
             dob: (form.querySelector("#dob") as HTMLInputElement).value,
             role: (form.querySelector("#role") as HTMLInputElement).value,
@@ -513,7 +512,6 @@ function updateUserListener(userId: string) {
             await userApiManager.updateUser(userId, {
                 first_name: formData.firstName,
                 last_name: formData.lastName,
-                email: formData.email,
                 phone: formData.phone,
                 dob: formData.dob,
                 role: formData.role as UserRoles,

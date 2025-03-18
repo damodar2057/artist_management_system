@@ -34,10 +34,10 @@ export class MusicModel {
         }
     }
 
-    async findAllMusicsByArtistId(options: IPaginationOptions, music_id: string): Promise<{ data: IMusicEntity[], total: number }> {
+    async findAllMusicsByArtistId(options: IPaginationOptions, artist_id: string): Promise<{ data: IMusicEntity[], total: number }> {
         try {
-            const data = (await this.dbConnection.query(musicQueries.findAllMusicByArtistId(options, music_id)))
-            return { data: data.rows, total:  (await this.dbConnection.query(`SELECT * FROM ${DBTables.MUSIC} WHERE music_id=${music_id}`)).rowCount }
+            const data = (await this.dbConnection.query(musicQueries.findAllMusicByArtistId(options, artist_id)))
+            return { data: data.rows, total:  (await this.dbConnection.query(`SELECT * FROM ${DBTables.MUSIC} WHERE artist_id=${artist_id}`)).rowCount }
         } catch (error) {
             throw error
         }

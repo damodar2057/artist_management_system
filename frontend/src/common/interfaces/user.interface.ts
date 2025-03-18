@@ -34,7 +34,7 @@ export interface ICreateUser {
 export interface IUpdateUser {
     first_name: string;
     last_name: string;
-    email: string;
+    email?: string;
     phone: string;
     dob: string;
     gender: Gender;

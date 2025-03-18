@@ -1,9 +1,6 @@
 // backend/src/services/auth.service.ts
 
 
-import { ErrorCodes } from "src/common/constants/error-codes.enum";
-import { BadRequestException } from "src/common/exceptions/badRequest.exception";
-import { BaseException } from "src/common/exceptions/base.exception";
 import { NotFoundException } from "src/common/exceptions/notFound.exception";
 import { ConflictException } from "src/common/exceptions/resource-conflict.exception";
 import { UnauthorizedException } from "src/common/exceptions/unauthorized.exception";
@@ -36,8 +33,7 @@ export class AuthService {
             if (!existingUser) {
                 throw new NotFoundException(`User not found!`)
             }
-
-            if (!verifyHash(dto.password, existingUser.password)) {
+            if (!await verifyHash(dto.password, existingUser.password)) {
                 throw new UnauthorizedException('Invalid credentials')
             }
 
